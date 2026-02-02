@@ -1,0 +1,257 @@
+---
+import { NAV_ITEMS, SITE } from '@/utils/config';
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="header" id="header">
+  <div class="header__inner container">
+    <a href="/" class="header__logo" aria-label="Strona główna 1copywriting.pl">
+      <span class="header__logo-icon">✦</span>
+      <span class="header__logo-text">
+        <span class="header__logo-num">1</span>copywriting
+      </span>
+    </a>
+
+    <nav class="header__nav" id="mainNav" aria-label="Nawigacja główna">
+      <ul class="header__nav-list">
+        {NAV_ITEMS.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class:list={[
+                'header__nav-link',
+                { 'is-active': currentPath.startsWith(item.href) },
+              ]}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <button
+      class="header__burger"
+      id="menuToggle"
+      aria-label="Otwórz menu"
+      aria-expanded="false"
+      aria-controls="mobileMenu"
+    >
+      <span class="header__burger-line"></span>
+      <span class="header__burger-line"></span>
+      <span class="header__burger-line"></span>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav aria-label="Menu mobilne">
+      <ul class="mobile-menu__list">
+        {NAV_ITEMS.map((item) => (
+          <li>
+            <a href={item.href} class="mobile-menu__link">
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(250, 250, 248, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--color-border-light);
+    height: var(--header-height);
+    transition: box-shadow var(--transition-base);
+  }
+
+  .header.is-scrolled {
+    box-shadow: var(--shadow-sm);
+  }
+
+  .header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    gap: var(--space-xl);
+  }
+
+  /* Logo */
+  .header__logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--color-ink);
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    white-space: nowrap;
+    transition: opacity var(--transition-fast);
+  }
+
+  .header__logo:hover {
+    color: var(--color-ink);
+    opacity: 0.8;
+  }
+
+  .header__logo-icon {
+    color: var(--color-accent);
+    font-size: 1.1rem;
+  }
+
+  .header__logo-num {
+    color: var(--color-accent);
+  }
+
+  /* Nav */
+  .header__nav-list {
+    display: flex;
+    list-style: none;
+    gap: var(--space-xs);
+  }
+
+  .header__nav-link {
+    display: block;
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-ink-muted);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+    letter-spacing: 0.01em;
+  }
+
+  .header__nav-link:hover {
+    color: var(--color-ink);
+    background: var(--color-paper-alt);
+  }
+
+  .header__nav-link.is-active {
+    color: var(--color-accent);
+    background: var(--color-accent-light);
+  }
+
+  /* Burger */
+  .header__burger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+  }
+
+  .header__burger-line {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: var(--color-ink);
+    border-radius: 2px;
+    transition: all var(--transition-base);
+    transform-origin: center;
+  }
+
+  .header__burger.is-open .header__burger-line:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .header__burger.is-open .header__burger-line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .header__burger.is-open .header__burger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+
+  /* Mobile menu */
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--color-paper);
+    padding: var(--space-xl);
+    z-index: 99;
+    overflow-y: auto;
+  }
+
+  .mobile-menu.is-open {
+    display: block;
+    animation: fadeIn 0.2s ease;
+  }
+
+  .mobile-menu__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .mobile-menu__link {
+    display: block;
+    padding: var(--space-md) var(--space-lg);
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    color: var(--color-ink);
+    border-radius: var(--radius-md);
+    transition: background var(--transition-fast);
+  }
+
+  .mobile-menu__link:hover {
+    background: var(--color-paper-alt);
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 1024px) {
+    .header__nav {
+      display: none;
+    }
+
+    .header__burger {
+      display: flex;
+    }
+  }
+</style>
+
+<script>
+  // Sticky header shadow
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => {
+    header?.classList.toggle('is-scrolled', window.scrollY > 10);
+  });
+
+  // Mobile menu toggle
+  const toggle = document.getElementById('menuToggle');
+  const menu = document.getElementById('mobileMenu');
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = toggle.classList.toggle('is-open');
+    menu?.classList.toggle('is-open', isOpen);
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    menu?.setAttribute('aria-hidden', String(!isOpen));
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+
+  // Close mobile menu on link click
+  menu?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      toggle?.classList.remove('is-open');
+      menu?.classList.remove('is-open');
+      document.body.style.overflow = '';
+    });
+  });
+</script>

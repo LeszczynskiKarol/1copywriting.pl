@@ -1,0 +1,111 @@
+---
+interface TocItem {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: TocItem[];
+}
+
+const { headings } = Astro.props;
+const filteredHeadings = headings.filter((h) => h.depth <= 3);
+---
+
+{filteredHeadings.length > 0 && (
+  <aside class="toc" aria-label="Spis treści">
+    <details class="toc__details" open>
+      <summary class="toc__summary">
+        <span class="toc__title">Spis treści</span>
+        <span class="toc__toggle" aria-hidden="true"></span>
+      </summary>
+      <nav>
+        <ol class="toc__list">
+          {filteredHeadings.map((heading) => (
+            <li class:list={['toc__item', `toc__item--h${heading.depth}`]}>
+              <a href={`#${heading.slug}`} class="toc__link">
+                {heading.text}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    </details>
+  </aside>
+)}
+
+<style>
+  .toc {
+    background: var(--color-paper-warm);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    margin: var(--space-2xl) 0;
+  }
+
+  .toc__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+
+  .toc__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .toc__title {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-ink-muted);
+  }
+
+  .toc__toggle::after {
+    content: '▾';
+    color: var(--color-ink-subtle);
+    font-size: 0.8em;
+  }
+
+  .toc__details:not([open]) .toc__toggle::after {
+    content: '▸';
+  }
+
+  .toc__list {
+    list-style: none;
+    margin-top: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    counter-reset: toc;
+  }
+
+  .toc__item {
+    counter-increment: toc;
+  }
+
+  .toc__link {
+    display: block;
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+    line-height: var(--leading-snug);
+  }
+
+  .toc__link:hover {
+    color: var(--color-accent);
+    background: var(--color-accent-light);
+  }
+
+  .toc__item--h3 .toc__link {
+    padding-left: var(--space-xl);
+    font-size: var(--text-xs);
+  }
+</style>

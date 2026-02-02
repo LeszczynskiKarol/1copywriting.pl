@@ -1,0 +1,119 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import ArticleCard from '@/components/ArticleCard.astro';
+import Newsletter from '@/components/Newsletter.astro';
+
+const breadcrumbs = [
+  { label: 'Strona główna', href: '/' },
+  { label: 'Blog' },
+];
+
+// Will be replaced with getCollection('blog')
+const posts: any[] = [];
+---
+
+<BaseLayout
+  title="Blog o copywritingu"
+  description="Artykuły, poradniki i przewodniki o copywritingu. Techniki pisania, formuły, narzędzia i inspiracje dla copywriterów."
+>
+  <section class="blog-page">
+    <div class="container">
+      <Breadcrumbs items={breadcrumbs} />
+
+      <header class="blog-page__header">
+        <h1 class="blog-page__title">Blog</h1>
+        <p class="blog-page__desc">
+          Artykuły, poradniki i&nbsp;przewodniki. Wszystko, czego potrzebujesz, żeby pisać lepiej.
+        </p>
+      </header>
+
+      {posts.length > 0 ? (
+        <div class="blog-page__grid">
+          {posts.map((post: any) => (
+            <ArticleCard
+              title={post.data.title}
+              description={post.data.description}
+              href={`/blog/${post.slug}/`}
+              category={post.data.category}
+              date={post.data.publishDate}
+              readingTime={post.data.readingTime}
+            />
+          ))}
+        </div>
+      ) : (
+        <div class="blog-page__empty">
+          <div class="blog-page__empty-icon">📝</div>
+          <h2>Pierwsze artykuły już wkrótce</h2>
+          <p>Zapisz się na newsletter — damy Ci znać, gdy opublikujemy nowe treści.</p>
+        </div>
+      )}
+
+      <div class="blog-page__newsletter">
+        <Newsletter variant="inline" />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .blog-page {
+    padding: var(--space-2xl) 0 var(--space-4xl);
+  }
+
+  .blog-page__header {
+    margin-bottom: var(--space-3xl);
+  }
+
+  .blog-page__title {
+    font-size: var(--text-4xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .blog-page__desc {
+    font-size: var(--text-lg);
+    color: var(--color-ink-muted);
+    max-width: 50ch;
+  }
+
+  .blog-page__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+  }
+
+  .blog-page__empty {
+    text-align: center;
+    padding: var(--space-4xl) var(--space-xl);
+    background: var(--color-paper-warm);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-xl);
+  }
+
+  .blog-page__empty-icon {
+    font-size: 3rem;
+    margin-bottom: var(--space-lg);
+  }
+
+  .blog-page__empty h2 {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .blog-page__empty p {
+    color: var(--color-ink-muted);
+    max-width: 40ch;
+    margin-inline: auto;
+  }
+
+  .blog-page__newsletter {
+    margin-top: var(--space-4xl);
+    max-width: var(--max-content);
+  }
+
+  @media (max-width: 768px) {
+    .blog-page__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

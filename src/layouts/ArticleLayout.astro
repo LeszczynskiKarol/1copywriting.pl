@@ -1,0 +1,300 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import TableOfContents from '@/components/TableOfContents.astro';
+import Newsletter from '@/components/Newsletter.astro';
+import { SITE } from '@/utils/config';
+
+interface Props {
+  title: string;
+  description: string;
+  publishDate: Date;
+  updatedDate?: Date;
+  author?: string;
+  category: string;
+  silo: string;
+  keyword: string;
+  tags?: string[];
+  image?: string;
+  imageAlt?: string;
+  readingTime?: number;
+  headings: { depth: number; slug: string; text: string }[];
+}
+
+const {
+  title,
+  description,
+  publishDate,
+  updatedDate,
+  author = 'Redakcja 1copywriting.pl',
+  category,
+  silo,
+  keyword,
+  tags = [],
+  image,
+  imageAlt,
+  readingTime,
+  headings,
+} = Astro.props;
+
+const formattedDate = new Intl.DateTimeFormat('pl-PL', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+}).format(publishDate);
+
+const formattedUpdate = updatedDate
+  ? new Intl.DateTimeFormat('pl-PL', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    }).format(updatedDate)
+  : null;
+
+const canonicalURL = new URL(Astro.url.pathname, SITE.url).href;
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description,
+  image: image ? new URL(image, SITE.url).href : undefined,
+  datePublished: publishDate.toISOString(),
+  dateModified: (updatedDate || publishDate).toISOString(),
+  author: {
+    '@type': 'Person',
+    name: author,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: SITE.title,
+    url: SITE.url,
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': canonicalURL,
+  },
+  keywords: [keyword, ...tags].join(', '),
+};
+
+const breadcrumbs = [
+  { label: 'Strona główna', href: '/' },
+  { label: category, href: `/${silo}/` },
+  { label: title },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image={image}
+  type="article"
+  publishDate={publishDate}
+  updatedDate={updatedDate}
+  schema={articleSchema}
+>
+  <article class="article">
+    <div class="container">
+      <Breadcrumbs items={breadcrumbs} />
+
+      <header class="article__header">
+        <div class="article__meta-top">
+          <a href={`/${silo}/`} class="article__category">{category}</a>
+          {readingTime && <span class="article__reading-time">{readingTime} min czytania</span>}
+        </div>
+        <h1 class="article__title">{title}</h1>
+        <p class="article__lead">{description}</p>
+        <div class="article__meta-bottom">
+          <span class="article__author">{author}</span>
+          <span class="article__date-sep">·</span>
+          <time datetime={publishDate.toISOString()}>{formattedDate}</time>
+          {formattedUpdate && (
+            <>
+              <span class="article__date-sep">·</span>
+              <span>Aktualizacja: {formattedUpdate}</span>
+            </>
+          )}
+        </div>
+      </header>
+
+      {image && (
+        <div class="article__hero-image">
+          <img src={image} alt={imageAlt || title} loading="eager" />
+        </div>
+      )}
+
+      <div class="article__body">
+        <div class="article__content prose">
+          <TableOfContents headings={headings} />
+          <slot />
+        </div>
+
+        <aside class="article__sidebar">
+          <div class="article__sidebar-sticky">
+            {tags.length > 0 && (
+              <div class="article__tags">
+                <h4 class="article__sidebar-title">Tagi</h4>
+                <div class="article__tag-list">
+                  {tags.map((tag) => (
+                    <span class="article__tag">{tag}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </aside>
+      </div>
+
+      <div class="article__footer">
+        <Newsletter variant="inline" />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .article {
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-4xl);
+  }
+
+  /* Header */
+  .article__header {
+    max-width: var(--max-content);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .article__meta-top {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+
+  .article__category {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .article__category:hover {
+    text-decoration: underline;
+  }
+
+  .article__reading-time {
+    font-size: var(--text-xs);
+    color: var(--color-ink-subtle);
+  }
+
+  .article__title {
+    font-size: var(--text-4xl);
+    line-height: 1.1;
+    margin-bottom: var(--space-lg);
+    max-width: 18ch;
+  }
+
+  .article__lead {
+    font-size: var(--text-lg);
+    color: var(--color-ink-muted);
+    line-height: var(--leading-relaxed);
+    max-width: 60ch;
+  }
+
+  .article__meta-bottom {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--text-sm);
+    color: var(--color-ink-subtle);
+    margin-top: var(--space-xl);
+    padding-top: var(--space-xl);
+    border-top: 1px solid var(--color-border-light);
+  }
+
+  .article__author {
+    font-weight: 500;
+    color: var(--color-ink-light);
+  }
+
+  /* Hero image */
+  .article__hero-image {
+    max-width: var(--max-wide);
+    margin-bottom: var(--space-3xl);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+  }
+
+  .article__hero-image img {
+    width: 100%;
+    aspect-ratio: 2/1;
+    object-fit: cover;
+  }
+
+  /* Body with sidebar */
+  .article__body {
+    display: grid;
+    grid-template-columns: var(--max-content) 1fr;
+    gap: var(--space-4xl);
+    align-items: start;
+  }
+
+  .article__sidebar {
+    display: none;
+  }
+
+  .article__sidebar-sticky {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-2xl));
+  }
+
+  .article__sidebar-title {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-ink-subtle);
+    margin-bottom: var(--space-md);
+  }
+
+  .article__tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+
+  .article__tag {
+    display: inline-block;
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--text-xs);
+    background: var(--color-paper-alt);
+    color: var(--color-ink-muted);
+    border-radius: var(--radius-full);
+    border: 1px solid var(--color-border-light);
+  }
+
+  /* Footer */
+  .article__footer {
+    max-width: var(--max-content);
+    margin-top: var(--space-4xl);
+  }
+
+  @media (min-width: 1100px) {
+    .article__sidebar {
+      display: block;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .article__body {
+      grid-template-columns: 1fr;
+    }
+
+    .article__title {
+      font-size: var(--text-3xl);
+    }
+  }
+</style>

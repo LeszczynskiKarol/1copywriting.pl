@@ -1,0 +1,74 @@
+---
+import { SITE } from '@/utils/config';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  canonicalURL?: string;
+  type?: 'website' | 'article';
+  publishDate?: Date;
+  updatedDate?: Date;
+  author?: string;
+  noindex?: boolean;
+  schema?: Record<string, any>;
+}
+
+const {
+  title,
+  description,
+  image = '/images/og-default.jpg',
+  canonicalURL = new URL(Astro.url.pathname, SITE.url).href,
+  type = 'website',
+  publishDate,
+  updatedDate,
+  author = SITE.author,
+  noindex = false,
+  schema,
+} = Astro.props;
+
+const fullTitle = title === SITE.title ? title : `${title} | ${SITE.title}`;
+const ogImage = new URL(image, SITE.url).href;
+---
+
+<!-- Primary Meta -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<meta name="author" content={author} />
+<link rel="canonical" href={canonicalURL} />
+<meta name="generator" content={Astro.generator} />
+
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+<!-- Open Graph -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:locale" content={SITE.locale} />
+<meta property="og:site_name" content={SITE.title} />
+
+{publishDate && <meta property="article:published_time" content={publishDate.toISOString()} />}
+{updatedDate && <meta property="article:modified_time" content={updatedDate.toISOString()} />}
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+<!-- Preconnect -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+<!-- JSON-LD Schema -->
+{schema && (
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+)}

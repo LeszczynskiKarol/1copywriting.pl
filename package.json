@@ -1,0 +1,17 @@
+{
+  "name": "1copywriting-pl",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "1copywriting.pl - Kompletny przewodnik po copywritingu",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.7.10",
+    "@astrojs/sitemap": "^3.3.1"
+  }
+}

@@ -1,0 +1,82 @@
+---
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map((item, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: item.label,
+    ...(item.href && { item: `https://1copywriting.pl${item.href}` }),
+  })),
+};
+---
+
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <ol class="breadcrumbs__list">
+    {items.map((item, index) => (
+      <li class="breadcrumbs__item">
+        {item.href ? (
+          <a href={item.href} class="breadcrumbs__link">{item.label}</a>
+        ) : (
+          <span class="breadcrumbs__current" aria-current="page">{item.label}</span>
+        )}
+        {index < items.length - 1 && (
+          <span class="breadcrumbs__sep" aria-hidden="true">/</span>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+<style>
+  .breadcrumbs {
+    margin-bottom: var(--space-xl);
+  }
+
+  .breadcrumbs__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-xs);
+    list-style: none;
+    font-size: var(--text-sm);
+  }
+
+  .breadcrumbs__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+
+  .breadcrumbs__link {
+    color: var(--color-ink-muted);
+    transition: color var(--transition-fast);
+  }
+
+  .breadcrumbs__link:hover {
+    color: var(--color-accent);
+  }
+
+  .breadcrumbs__current {
+    color: var(--color-ink-light);
+    font-weight: 500;
+  }
+
+  .breadcrumbs__sep {
+    color: var(--color-border);
+    font-size: 0.8em;
+  }
+</style>

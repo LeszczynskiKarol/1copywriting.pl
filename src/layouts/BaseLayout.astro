@@ -1,0 +1,46 @@
+---
+import '@/styles/global.css';
+import SEOHead from '@/components/SEOHead.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import { SITE, SCHEMA_ORG } from '@/utils/config';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  type?: 'website' | 'article';
+  publishDate?: Date;
+  updatedDate?: Date;
+  noindex?: boolean;
+  schema?: Record<string, any>;
+}
+
+const props = Astro.props;
+---
+
+<!doctype html>
+<html lang={SITE.lang}>
+  <head>
+    <SEOHead
+      title={props.title}
+      description={props.description}
+      image={props.image}
+      type={props.type}
+      publishDate={props.publishDate}
+      updatedDate={props.updatedDate}
+      noindex={props.noindex}
+      schema={props.schema || SCHEMA_ORG}
+    />
+  </head>
+  <body>
+    <a href="#main" class="sr-only" style="position:fixed;top:0;left:0;z-index:1000;padding:1rem;background:var(--color-accent);color:white;transform:translateY(-100%);transition:transform .2s;" onfocus="this.style.transform='translateY(0)'" onblur="this.style.transform='translateY(-100%)'">
+      Przejdź do treści
+    </a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

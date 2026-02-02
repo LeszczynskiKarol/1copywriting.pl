@@ -1,0 +1,184 @@
+---
+import { SILOS, SITE } from '@/utils/config';
+
+const year = new Date().getFullYear();
+
+const footerSilos = SILOS.slice(0, 6);
+const footerSilos2 = SILOS.slice(6);
+---
+
+<footer class="footer">
+  <div class="footer__top container">
+    <div class="footer__brand">
+      <a href="/" class="footer__logo">
+        <span class="footer__logo-icon">✦</span>
+        <span><span class="footer__logo-num">1</span>copywriting.pl</span>
+      </a>
+      <p class="footer__tagline">
+        Kompletny przewodnik po&nbsp;copywritingu.
+        Definicje, zasady, formuły&nbsp;i&nbsp;praktyczne poradniki.
+      </p>
+    </div>
+
+    <div class="footer__columns">
+      <div class="footer__col">
+        <h4 class="footer__col-title">Przewodniki</h4>
+        <ul class="footer__links">
+          {footerSilos.map((silo) => (
+            <li>
+              <a href={`/${silo.slug}/`}>{silo.title}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4 class="footer__col-title">Więcej</h4>
+        <ul class="footer__links">
+          {footerSilos2.map((silo) => (
+            <li>
+              <a href={`/${silo.slug}/`}>{silo.title}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4 class="footer__col-title">Informacje</h4>
+        <ul class="footer__links">
+          <li><a href="/o-nas/">O nas</a></li>
+          <li><a href="/kontakt/">Kontakt</a></li>
+          <li><a href="/polityka-prywatnosci/">Polityka prywatności</a></li>
+          <li><a href="/mapa-strony/">Mapa strony</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer__bottom container">
+    <p class="footer__copy">
+      &copy; {year} {SITE.title}. Wszelkie prawa zastrzeżone.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--color-ink);
+    color: #d4d0c8;
+    margin-top: var(--space-5xl);
+  }
+
+  .footer__top {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--space-4xl);
+    padding-top: var(--space-4xl);
+    padding-bottom: var(--space-3xl);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .footer__brand {
+    max-width: 320px;
+  }
+
+  .footer__logo {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    color: white;
+    margin-bottom: var(--space-lg);
+  }
+
+  .footer__logo:hover {
+    color: white;
+    opacity: 0.9;
+  }
+
+  .footer__logo-icon {
+    color: var(--color-accent);
+  }
+
+  .footer__logo-num {
+    color: var(--color-accent);
+  }
+
+  .footer__tagline {
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: #9ca3af;
+    margin-bottom: 0;
+  }
+
+  .footer__columns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-2xl);
+  }
+
+  .footer__col-title {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #9ca3af;
+    margin-bottom: var(--space-lg);
+  }
+
+  .footer__links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .footer__links a {
+    font-size: var(--text-sm);
+    color: #d4d0c8;
+    transition: color var(--transition-fast);
+  }
+
+  .footer__links a:hover {
+    color: white;
+  }
+
+  .footer__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: var(--space-xl);
+    padding-bottom: var(--space-xl);
+  }
+
+  .footer__copy {
+    font-size: var(--text-xs);
+    color: #6b7280;
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 1024px) {
+    .footer__top {
+      grid-template-columns: 1fr;
+      gap: var(--space-2xl);
+    }
+
+    .footer__brand {
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .footer__columns {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .footer__columns {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
