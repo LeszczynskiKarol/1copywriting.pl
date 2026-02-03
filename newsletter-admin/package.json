@@ -1,0 +1,13 @@
+{
+  "name": "newsletter-admin",
+  "type": "module",
+  "scripts": {
+    "send": "node send-newsletter.mjs",
+    "list": "node list-subscribers.mjs"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.0.0",
+    "@aws-sdk/client-ses": "^3.0.0",
+    "@aws-sdk/lib-dynamodb": "^3.0.0"
+  }
+}

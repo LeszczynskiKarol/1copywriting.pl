@@ -26,3 +26,6 @@ pnpm-debug.log*
 
 # astro
 .astro/
+
+newsletter-admin/node_modules/
+newsletter-admin/package-lock.json
