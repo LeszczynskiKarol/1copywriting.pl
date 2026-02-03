@@ -4,6 +4,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import ArticleCard from '@/components/ArticleCard.astro';
 import Newsletter from '@/components/Newsletter.astro';
+import PromoSection from '@/components/PromoSection.astro';
 import { SILOS, SITE } from '@/utils/config';
 
 export async function getStaticPaths() {
@@ -114,10 +115,15 @@ const categorySchema = {
           </p>
         </div>
       ) : null}
+    </div>
+  </section>
 
-      <div class="silo-page__newsletter">
-        <Newsletter variant="inline" />
-      </div>
+  <!-- SMART-COPY.AI PROMO -->
+  <PromoSection variant="compact" />
+
+  <section class="silo-page__footer">
+    <div class="container">
+      <Newsletter variant="inline" />
     </div>
   </section>
 </BaseLayout>
@@ -209,8 +215,11 @@ const categorySchema = {
     margin-inline: auto;
   }
 
-  .silo-page__newsletter {
-    margin-top: var(--space-4xl);
+  .silo-page__footer {
+    padding: var(--space-4xl) 0;
+  }
+
+  .silo-page__footer .container {
     max-width: var(--max-content);
   }
 

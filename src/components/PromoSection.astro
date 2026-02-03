@@ -1,0 +1,404 @@
+---
+/**
+ * Smart-Copy.AI Promotional Section
+ *
+ * Full-width promotional component for homepage, blog index, and silo pages.
+ * Design matches Smart-Copy.ai brand:
+ *  - Light background with subtle purple gradient
+ *  - Purple/violet primary accent (#7C3AED)
+ *  - Clean, modern SaaS aesthetic
+ *  - Green checkmarks for features
+ *
+ * Usage:
+ *   <PromoSection />
+ *   <PromoSection variant="compact" />
+ */
+
+interface Props {
+  variant?: 'default' | 'compact';
+}
+
+const { variant = 'default' } = Astro.props;
+---
+
+<section class:list={['promo-section', `promo-section--${variant}`]}>
+  <div class="promo-section__container">
+    <div class="promo-section__content">
+      <!-- Badge -->
+      <span class="promo-section__badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 2L9.5 8.5 3 10l5 4.5L6.5 21 12 17.5 17.5 21 16 14.5 21 10l-6.5-1.5L12 2z" fill="currentColor"/>
+        </svg>
+        Smart-Copy.ai
+      </span>
+
+      <!-- Headline -->
+      <h2 class="promo-section__title">
+        {variant === 'compact' ? (
+          <>Potrzebujesz <em>profesjonalnych tekstów</em>?</>
+        ) : (
+          <>Generuj <em>wysokiej jakości artykuły</em> z&nbsp;pomocą AI</>
+        )}
+      </h2>
+
+      <!-- Description -->
+      <p class="promo-section__desc">
+        {variant === 'compact' ? (
+          <>Smart-Copy.ai to generator treści AI, który tworzy unikalne, SEO-friendly artykuły na dowolny temat.</>
+        ) : (
+          <>Nasz generator treści AI tworzy unikalne, angażujące artykuły blogowe, opisy produktów i&nbsp;teksty marketingowe. Oszczędź czas i&nbsp;pieniądze — bez kompromisów w&nbsp;jakości.</>
+        )}
+      </p>
+
+      <!-- Features -->
+      <ul class="promo-section__features">
+        <li class="promo-section__feature">
+          <svg class="promo-section__check" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <circle cx="9" cy="9" r="9" fill="#22C55E" opacity="0.12"/>
+            <path d="M5 9.3L7.5 11.8L13 6.2" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          100% oryginalny content
+        </li>
+        <li class="promo-section__feature">
+          <svg class="promo-section__check" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <circle cx="9" cy="9" r="9" fill="#22C55E" opacity="0.12"/>
+            <path d="M5 9.3L7.5 11.8L13 6.2" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Optymalizacja SEO
+        </li>
+        <li class="promo-section__feature">
+          <svg class="promo-section__check" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <circle cx="9" cy="9" r="9" fill="#22C55E" opacity="0.12"/>
+            <path d="M5 9.3L7.5 11.8L13 6.2" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Export PDF, DOCX, HTML
+        </li>
+        {variant === 'default' && (
+          <li class="promo-section__feature">
+            <svg class="promo-section__check" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+              <circle cx="9" cy="9" r="9" fill="#22C55E" opacity="0.12"/>
+              <path d="M5 9.3L7.5 11.8L13 6.2" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Bez abonamentu — płać za tekst
+          </li>
+        )}
+      </ul>
+
+      <!-- CTA -->
+      <a
+        href="https://smart-copy.ai/?utm_source=1copywriting&utm_medium=promo_section&utm_campaign=article_promo"
+        target="_blank"
+        rel="noopener"
+        class="promo-section__cta"
+      >
+        Wypróbuj Smart-Copy.ai
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <path d="M3.5 9h10m0 0L9.5 5M13.5 9l-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Visual / Price Card -->
+    <div class="promo-section__visual">
+      <div class="promo-section__price-card">
+        <div class="promo-section__price-header">
+          <div class="promo-section__logo" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2L9.5 8.5 3 10l5 4.5L6.5 21 12 17.5 17.5 21 16 14.5 21 10l-6.5-1.5L12 2z" fill="currentColor"/>
+            </svg>
+          </div>
+          <span class="promo-section__price-label">Artykuł AI</span>
+        </div>
+        <div class="promo-section__price-body">
+          <span class="promo-section__price-from">już od</span>
+          <div class="promo-section__price-row">
+            <span class="promo-section__price-value">3,99 zł</span>
+            <span class="promo-section__price-unit">/ 1000 znaków</span>
+          </div>
+        </div>
+        <div class="promo-section__price-footer">
+          <span>✓ Bez ukrytych kosztów</span>
+          <span>✓ Płatność za efekt</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .promo-section {
+    padding: var(--space-4xl) 0;
+    background: linear-gradient(135deg, #faf5ff 0%, #f5f3ff 50%, #ede9fe 100%);
+    border-top: 1px solid #e9d5ff;
+    border-bottom: 1px solid #e9d5ff;
+  }
+
+  .promo-section__container {
+    max-width: var(--max-width, 1200px);
+    margin: 0 auto;
+    padding: 0 var(--space-lg);
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: var(--space-3xl);
+    align-items: center;
+  }
+
+  /* Badge */
+  .promo-section__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #7C3AED;
+    background: white;
+    padding: 6px 12px;
+    border-radius: 50px;
+    border: 1px solid #e9d5ff;
+    margin-bottom: var(--space-lg);
+    font-family: 'Roboto', 'DM Sans', system-ui, sans-serif;
+  }
+
+  /* Title */
+  .promo-section__title {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    line-height: 1.2;
+    color: #1f2937;
+    margin-bottom: var(--space-md);
+    max-width: 20ch;
+  }
+
+  .promo-section__title em {
+    font-style: normal;
+    color: #7C3AED;
+  }
+
+  /* Description */
+  .promo-section__desc {
+    font-size: var(--text-base);
+    line-height: 1.7;
+    color: #4b5563;
+    max-width: 50ch;
+    margin-bottom: var(--space-xl);
+  }
+
+  /* Features */
+  .promo-section__features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-xl) 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm) var(--space-xl);
+  }
+
+  .promo-section__feature {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    font-family: 'Roboto', 'DM Sans', system-ui, sans-serif;
+  }
+
+  .promo-section__check {
+    flex-shrink: 0;
+  }
+
+  /* CTA Button */
+  .promo-section__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(135deg, #7C3AED, #6D28D9);
+    border-radius: 10px;
+    text-decoration: none;
+    font-family: 'Roboto', 'DM Sans', system-ui, sans-serif;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25);
+  }
+
+  .promo-section__cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35);
+  }
+
+  .promo-section__cta svg {
+    transition: transform 0.2s ease;
+  }
+
+  .promo-section__cta:hover svg {
+    transform: translateX(3px);
+  }
+
+  /* Visual / Price Card */
+  .promo-section__visual {
+    display: flex;
+    justify-content: center;
+  }
+
+  .promo-section__price-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 24px;
+    width: 100%;
+    max-width: 280px;
+    box-shadow: 0 8px 30px rgba(124, 58, 237, 0.08);
+    font-family: 'Roboto', 'DM Sans', system-ui, sans-serif;
+  }
+
+  .promo-section__price-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #f3f4f6;
+  }
+
+  .promo-section__logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, #7C3AED, #6D28D9);
+    border-radius: 12px;
+    color: white;
+  }
+
+  .promo-section__price-label {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  .promo-section__price-body {
+    margin-bottom: 16px;
+  }
+
+  .promo-section__price-from {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #9ca3af;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .promo-section__price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  .promo-section__price-value {
+    font-size: 36px;
+    font-weight: 700;
+    color: #7C3AED;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .promo-section__price-unit {
+    font-size: 13px;
+    color: #6b7280;
+  }
+
+  .promo-section__price-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12px;
+    color: #22C55E;
+    font-weight: 500;
+  }
+
+  /* Compact variant */
+  .promo-section--compact {
+    padding: var(--space-2xl) 0;
+  }
+
+  .promo-section--compact .promo-section__container {
+    grid-template-columns: 1fr auto;
+    gap: var(--space-2xl);
+  }
+
+  .promo-section--compact .promo-section__title {
+    font-size: var(--text-2xl);
+  }
+
+  .promo-section--compact .promo-section__desc {
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-lg);
+  }
+
+  .promo-section--compact .promo-section__features {
+    margin-bottom: var(--space-lg);
+  }
+
+  .promo-section--compact .promo-section__price-card {
+    max-width: 240px;
+    padding: 20px;
+  }
+
+  .promo-section--compact .promo-section__price-value {
+    font-size: 28px;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .promo-section__container {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+
+    .promo-section__title {
+      max-width: none;
+    }
+
+    .promo-section__desc {
+      max-width: none;
+      margin-inline: auto;
+    }
+
+    .promo-section__features {
+      justify-content: center;
+    }
+
+    .promo-section__cta {
+      width: 100%;
+      justify-content: center;
+      max-width: 320px;
+    }
+
+    .promo-section__visual {
+      order: -1;
+    }
+
+    .promo-section__price-card {
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .promo-section {
+      padding: var(--space-2xl) 0;
+    }
+
+    .promo-section__features {
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+  }
+</style>

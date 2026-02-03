@@ -4,6 +4,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import ArticleCard from '@/components/ArticleCard.astro';
 import Newsletter from '@/components/Newsletter.astro';
+import PromoSection from '@/components/PromoSection.astro';
 
 const breadcrumbs = [
   { label: 'Strona główna', href: '/' },
@@ -53,10 +54,15 @@ const posts = (await getCollection('blog')).sort(
           <p>Zapisz się na newsletter — damy Ci znać, gdy opublikujemy nowe treści.</p>
         </div>
       )}
+    </div>
+  </section>
 
-      <div class="blog-page__newsletter">
-        <Newsletter variant="inline" />
-      </div>
+  <!-- SMART-COPY.AI PROMO -->
+  <PromoSection variant="compact" />
+
+  <section class="blog-page__footer">
+    <div class="container">
+      <Newsletter variant="inline" />
     </div>
   </section>
 </BaseLayout>
@@ -111,8 +117,11 @@ const posts = (await getCollection('blog')).sort(
     margin-inline: auto;
   }
 
-  .blog-page__newsletter {
-    margin-top: var(--space-4xl);
+  .blog-page__footer {
+    padding: var(--space-4xl) 0;
+  }
+
+  .blog-page__footer .container {
     max-width: var(--max-content);
   }
 

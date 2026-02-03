@@ -4,6 +4,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import SiloCard from '@/components/SiloCard.astro';
 import ArticleCard from '@/components/ArticleCard.astro';
 import Newsletter from '@/components/Newsletter.astro';
+import PromoSection from '@/components/PromoSection.astro';
 import { SITE, SILOS, SCHEMA_ORG } from '@/utils/config';
 
 // Get all posts to pick featured ones
@@ -195,6 +196,9 @@ const websiteSchema = {
       </div>
     </div>
   </section>
+
+  <!-- SMART-COPY.AI PROMO -->
+  <PromoSection />
 
   <!-- NEWSLETTER -->
   <section class="section">
