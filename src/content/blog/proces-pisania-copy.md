@@ -6,6 +6,8 @@ tags: ["proces copywriterski", "workflow", "pisanie copy", "copywriting"]
 keyword: "proces pisania copy"
 category: "Proces i warsztat"
 silo: "proces-i-warsztat"
+image: "/images/blog/proces-pisania.jpg"
+imageAlt: "Proces pisania w copywritingu"
 priority: high
 relatedPosts:
   - research-w-copywritingu
