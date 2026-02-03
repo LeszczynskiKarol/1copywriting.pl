@@ -1,24 +1,42 @@
 ---
 import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import ArticleCard from '@/components/ArticleCard.astro';
 import Newsletter from '@/components/Newsletter.astro';
 import PromoSection from '@/components/PromoSection.astro';
+import Pagination from '@/components/Pagination.astro';
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = (await getCollection('blog')).sort(
+    (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+  );
+
+  // pageSize must be a literal or defined inside this function
+  return paginate(posts, { pageSize: 12 });
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
 
 const breadcrumbs = [
   { label: 'Strona główna', href: '/' },
   { label: 'Blog' },
 ];
 
-const posts = (await getCollection('blog')).sort(
-  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
-);
+// SEO: different title for page 2+
+const pageTitle = page.currentPage === 1 
+  ? 'Blog o copywritingu' 
+  : `Blog o copywritingu — strona ${page.currentPage}`;
+
+const pageDescription = page.currentPage === 1
+  ? 'Artykuły, poradniki i przewodniki o copywritingu. Techniki pisania, formuły, narzędzia i inspiracje dla copywriterów.'
+  : `Artykuły o copywritingu — strona ${page.currentPage} z ${page.lastPage}. Poradniki, techniki i inspiracje dla copywriterów.`;
 ---
 
 <BaseLayout
-  title="Blog o copywritingu"
-  description="Artykuły, poradniki i przewodniki o copywritingu. Techniki pisania, formuły, narzędzia i inspiracje dla copywriterów."
+  title={pageTitle}
+  description={pageDescription}
 >
   <section class="blog-page">
     <div class="container">
@@ -29,24 +47,37 @@ const posts = (await getCollection('blog')).sort(
         <p class="blog-page__desc">
           Artykuły, poradniki i&nbsp;przewodniki. Wszystko, czego potrzebujesz, żeby pisać lepiej.
         </p>
+        {page.lastPage > 1 && (
+          <p class="blog-page__count">
+            Strona {page.currentPage} z {page.lastPage} · {page.total} artykułów
+          </p>
+        )}
       </header>
 
-      {posts.length > 0 ? (
-        <div class="blog-page__grid">
-          {posts.map((post, i) => (
-            <ArticleCard
-              title={post.data.title}
-              description={post.data.description}
-              href={`/blog/${post.slug}/`}
-              category={post.data.category}
-              date={post.data.publishDate}
-              readingTime={post.data.readingTime}
-              image={post.data.image}
-              imageAlt={post.data.imageAlt}
-              featured={i === 0}
-            />
-          ))}
-        </div>
+      {page.data.length > 0 ? (
+        <>
+          <div class="blog-page__grid">
+            {page.data.map((post, i) => (
+              <ArticleCard
+                title={post.data.title}
+                description={post.data.description}
+                href={`/blog/${post.slug}/`}
+                category={post.data.category}
+                date={post.data.publishDate}
+                readingTime={post.data.readingTime}
+                image={post.data.image}
+                imageAlt={post.data.imageAlt}
+                featured={page.currentPage === 1 && i === 0}
+              />
+            ))}
+          </div>
+
+          <Pagination
+            currentPage={page.currentPage}
+            totalPages={page.lastPage}
+            baseUrl="/blog"
+          />
+        </>
       ) : (
         <div class="blog-page__empty">
           <div class="blog-page__empty-icon">📝</div>
@@ -57,8 +88,8 @@ const posts = (await getCollection('blog')).sort(
     </div>
   </section>
 
-  <!-- SMART-COPY.AI PROMO -->
-  <PromoSection variant="compact" />
+  <!-- SMART-COPY.AI PROMO (only on first page) -->
+  {page.currentPage === 1 && <PromoSection variant="compact" />}
 
   <section class="blog-page__footer">
     <div class="container">
@@ -85,6 +116,12 @@ const posts = (await getCollection('blog')).sort(
     font-size: var(--text-lg);
     color: var(--color-ink-muted);
     max-width: 50ch;
+  }
+
+  .blog-page__count {
+    font-size: var(--text-sm);
+    color: var(--color-ink-subtle);
+    margin-top: var(--space-md);
   }
 
   .blog-page__grid {
