@@ -1,18 +1,36 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import ArticleCard from '@/components/ArticleCard.astro';
 import Newsletter from '@/components/Newsletter.astro';
 import { SILOS, SITE } from '@/utils/config';
 
-export function getStaticPaths() {
-  return SILOS.map((silo) => ({
-    params: { silo: silo.slug },
-    props: { silo },
-  }));
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+
+  return SILOS.map((silo) => {
+    const siloArticles = posts
+      .filter((post) => post.data.silo === silo.slug)
+      .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+
+    return {
+      params: { silo: silo.slug },
+      props: { silo, articles: siloArticles },
+    };
+  });
 }
 
-const { silo } = Astro.props;
+const { silo, articles } = Astro.props;
+
+// Find pillar article (the one matching the silo slug or marked as pillar)
+const pillarArticle = articles.find(
+  (post) => post.slug === silo.slug
+);
+
+const regularArticles = articles.filter(
+  (post) => post.slug !== pillarArticle?.slug
+);
 
 const breadcrumbs = [
   { label: 'Strona główna', href: '/' },
@@ -31,9 +49,6 @@ const categorySchema = {
     url: SITE.url,
   },
 };
-
-// Placeholder articles - replace with content collection queries
-const articles: any[] = [];
 ---
 
 <BaseLayout
@@ -51,22 +66,45 @@ const articles: any[] = [];
         </div>
         <h1 class="silo-page__title">{silo.title}</h1>
         <p class="silo-page__desc">{silo.description}</p>
+        <span class="silo-page__count">
+          {articles.length} {articles.length === 1 ? 'artykuł' : articles.length < 5 ? 'artykuły' : 'artykułów'}
+        </span>
       </header>
 
-      {articles.length > 0 ? (
+      {/* Pillar article — highlighted at top */}
+      {pillarArticle && (
+        <div class="silo-page__pillar">
+          <span class="silo-page__pillar-badge">📖 Zacznij tutaj</span>
+          <ArticleCard
+            title={pillarArticle.data.title}
+            description={pillarArticle.data.description}
+            href={`/blog/${pillarArticle.slug}/`}
+            category={silo.title}
+            date={pillarArticle.data.publishDate}
+            readingTime={pillarArticle.data.readingTime}
+            image={pillarArticle.data.image}
+            imageAlt={pillarArticle.data.imageAlt}
+            featured={true}
+          />
+        </div>
+      )}
+
+      {regularArticles.length > 0 ? (
         <div class="silo-page__grid">
-          {articles.map((article: any) => (
+          {regularArticles.map((post) => (
             <ArticleCard
-              title={article.title}
-              description={article.description}
-              href={article.href}
+              title={post.data.title}
+              description={post.data.description}
+              href={`/blog/${post.slug}/`}
               category={silo.title}
-              date={article.date}
-              readingTime={article.readingTime}
+              date={post.data.publishDate}
+              readingTime={post.data.readingTime}
+              image={post.data.image}
+              imageAlt={post.data.imageAlt}
             />
           ))}
         </div>
-      ) : (
+      ) : !pillarArticle ? (
         <div class="silo-page__empty">
           <div class="silo-page__empty-icon" aria-hidden="true">✍️</div>
           <h2 class="silo-page__empty-title">Treści w przygotowaniu</h2>
@@ -75,7 +113,7 @@ const articles: any[] = [];
             Zapisz się na newsletter, żeby nie przegapić publikacji.
           </p>
         </div>
-      )}
+      ) : null}
 
       <div class="silo-page__newsletter">
         <Newsletter variant="inline" />
@@ -116,6 +154,29 @@ const articles: any[] = [];
     color: var(--color-ink-muted);
     line-height: var(--leading-relaxed);
     max-width: 55ch;
+    margin-bottom: var(--space-sm);
+  }
+
+  .silo-page__count {
+    display: inline-block;
+    font-size: var(--text-sm);
+    color: var(--color-ink-subtle);
+    font-weight: 500;
+  }
+
+  /* Pillar highlight */
+  .silo-page__pillar {
+    margin-bottom: var(--space-2xl);
+    padding-bottom: var(--space-2xl);
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .silo-page__pillar-badge {
+    display: inline-block;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-accent);
+    margin-bottom: var(--space-md);
   }
 
   .silo-page__grid {

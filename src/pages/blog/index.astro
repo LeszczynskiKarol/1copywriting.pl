@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import ArticleCard from '@/components/ArticleCard.astro';
@@ -9,8 +10,9 @@ const breadcrumbs = [
   { label: 'Blog' },
 ];
 
-// Will be replaced with getCollection('blog')
-const posts: any[] = [];
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+);
 ---
 
 <BaseLayout
@@ -30,7 +32,7 @@ const posts: any[] = [];
 
       {posts.length > 0 ? (
         <div class="blog-page__grid">
-          {posts.map((post: any) => (
+          {posts.map((post, i) => (
             <ArticleCard
               title={post.data.title}
               description={post.data.description}
@@ -38,6 +40,9 @@ const posts: any[] = [];
               category={post.data.category}
               date={post.data.publishDate}
               readingTime={post.data.readingTime}
+              image={post.data.image}
+              imageAlt={post.data.imageAlt}
+              featured={i === 0}
             />
           ))}
         </div>

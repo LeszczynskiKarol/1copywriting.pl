@@ -1,0 +1,239 @@
+---
+/**
+ * Smart-Copy.AI Promotional Banner
+ *
+ * Design matches actual Smart-Copy.ai brand:
+ *  - Light/white background
+ *  - Purple/violet primary accent (#7C3AED)
+ *  - Clean, airy, modern SaaS aesthetic
+ *  - Green checkmarks for features
+ *  - Roboto font
+ */
+---
+
+<a
+  href="https://smart-copy.ai/?utm_source=1copywriting&utm_medium=sidebar&utm_campaign=article_promo"
+  target="_blank"
+  rel="noopener"
+  class="sc-promo"
+>
+  <!-- Brand -->
+  <div class="sc-promo__brand">
+    <div class="sc-promo__logo" aria-hidden="true">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2L9.5 8.5 3 10l5 4.5L6.5 21 12 17.5 17.5 21 16 14.5 21 10l-6.5-1.5L12 2z" fill="currentColor"/>
+      </svg>
+    </div>
+    <div class="sc-promo__brand-text">
+      <span class="sc-promo__brand-name">Smart-Copy.ai</span>
+      <span class="sc-promo__brand-sub">Twój AI Copywriter</span>
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <div class="sc-promo__divider"></div>
+
+  <!-- Headline -->
+  <p class="sc-promo__headline">
+    Wygeneruj <strong>wysokiej jakości artykuł</strong> z&nbsp;AI na&nbsp;dowolny temat
+  </p>
+
+  <!-- Price -->
+  <div class="sc-promo__price-block">
+    <span class="sc-promo__price-from">już od</span>
+    <div class="sc-promo__price-row">
+      <span class="sc-promo__price-value">3,99 zł</span>
+      <span class="sc-promo__price-unit">/ 1000 znaków</span>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <ul class="sc-promo__features">
+    <li class="sc-promo__feature">
+      <svg class="sc-promo__check" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <circle cx="7" cy="7" r="7" fill="#22C55E" opacity="0.12"/>
+        <path d="M4 7.2L6 9.2L10 5" stroke="#22C55E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Oryginalny content
+    </li>
+    <li class="sc-promo__feature">
+      <svg class="sc-promo__check" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <circle cx="7" cy="7" r="7" fill="#22C55E" opacity="0.12"/>
+        <path d="M4 7.2L6 9.2L10 5" stroke="#22C55E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Export PDF, DOCX, HTML
+    </li>
+  </ul>
+
+  <!-- CTA -->
+  <span class="sc-promo__cta">
+    Generuj teksty z AI
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M3 8h9m0 0L8.5 4.5M12 8l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </span>
+</a>
+
+<style>
+  .sc-promo {
+    display: block;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px;
+    text-decoration: none;
+    color: #1f2937;
+    font-family: 'Roboto', 'DM Sans', system-ui, sans-serif;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .sc-promo:hover {
+    border-color: #c4b5fd;
+    box-shadow: 0 4px 16px rgba(124, 58, 237, 0.08);
+  }
+
+  /* Brand */
+  .sc-promo__brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .sc-promo__logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #7C3AED, #6D28D9);
+    border-radius: 8px;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .sc-promo__brand-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sc-promo__brand-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #111827;
+    letter-spacing: -0.01em;
+  }
+
+  .sc-promo__brand-sub {
+    font-size: 11px;
+    color: #9ca3af;
+    margin-top: 1px;
+  }
+
+  /* Divider */
+  .sc-promo__divider {
+    height: 1px;
+    background: #f3f4f6;
+    margin-bottom: 14px;
+  }
+
+  /* Headline */
+  .sc-promo__headline {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #374151;
+    margin-bottom: 14px;
+  }
+
+  .sc-promo__headline strong {
+    color: #111827;
+    font-weight: 600;
+  }
+
+  /* Price */
+  .sc-promo__price-block {
+    background: #faf5ff;
+    border: 1px solid #ede9fe;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+  }
+
+  .sc-promo__price-from {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #9ca3af;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .sc-promo__price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+
+  .sc-promo__price-value {
+    font-size: 26px;
+    font-weight: 700;
+    color: #7C3AED;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .sc-promo__price-unit {
+    font-size: 12px;
+    color: #6b7280;
+  }
+
+  /* Features */
+  .sc-promo__features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .sc-promo__feature {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #6b7280;
+  }
+
+  .sc-promo__check {
+    flex-shrink: 0;
+  }
+
+  /* CTA */
+  .sc-promo__cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(135deg, #7C3AED, #6D28D9);
+    border-radius: 8px;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+
+  .sc-promo:hover .sc-promo__cta {
+    opacity: 0.92;
+  }
+
+  .sc-promo__cta svg {
+    transition: transform 0.15s ease;
+  }
+
+  .sc-promo:hover .sc-promo__cta svg {
+    transform: translateX(2px);
+  }
+</style>

@@ -1,45 +1,31 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import SiloCard from '@/components/SiloCard.astro';
 import ArticleCard from '@/components/ArticleCard.astro';
 import Newsletter from '@/components/Newsletter.astro';
 import { SITE, SILOS, SCHEMA_ORG } from '@/utils/config';
 
-// Placeholder articles (will be replaced with content collection queries)
-const featuredArticles = [
-  {
-    title: 'Copywriting – co to jest? Definicja, znaczenie i zastosowanie',
-    description: 'Kompletny przewodnik po copywritingu. Dowiedz się czym jest, jak działa i dlaczego jest kluczowy dla Twojego biznesu.',
-    href: '/co-to-jest-copywriting/',
-    category: 'Podstawy',
-    date: new Date('2025-01-15'),
-    readingTime: 18,
-  },
-  {
-    title: 'Rodzaje copywritingu – kompletna klasyfikacja',
-    description: 'SEO, sprzedażowy, kreatywny, techniczny — poznaj wszystkie rodzaje copywritingu i dowiedz się, który jest dla Ciebie.',
-    href: '/rodzaje-copywritingu/',
-    category: 'Rodzaje',
-    date: new Date('2025-01-20'),
-    readingTime: 15,
-  },
-  {
-    title: 'Formuły copywriterskie – kompletny przewodnik',
-    description: 'AIDA, PAS, BAB i 15+ sprawdzonych schematów pisania, które natychmiast podniosą jakość Twoich tekstów.',
-    href: '/formuly-copywriterskie/',
-    category: 'Formuły',
-    date: new Date('2025-02-01'),
-    readingTime: 22,
-  },
-  {
-    title: 'Zasady copywritingu – 15 fundamentów dobrego tekstu',
-    description: 'Uniwersalne zasady, które odróżniają profesjonalny copy od amatorskiego. Lista zasad, które każdy copywriter musi znać.',
-    href: '/zasady-copywritingu/',
-    category: 'Zasady',
-    date: new Date('2025-02-05'),
-    readingTime: 14,
-  },
+// Get all posts to pick featured ones
+const allPosts = await getCollection('blog');
+
+// Featured slugs — pillar articles from the most important silos
+const featuredSlugs = [
+  'copywriting-co-to-jest',
+  'rodzaje-copywritingu',
+  'formuly-copywriterskie',
+  'zasady-copywritingu',
 ];
+
+const featuredArticles = featuredSlugs
+  .map((slug) => allPosts.find((p) => p.slug === slug))
+  .filter(Boolean);
+
+// Count articles per silo for SiloCard
+const siloCounts = SILOS.map((silo) => ({
+  ...silo,
+  count: allPosts.filter((p) => p.data.silo === silo.slug).length,
+}));
 
 const websiteSchema = {
   ...SCHEMA_ORG,
@@ -63,7 +49,7 @@ const websiteSchema = {
       <div class="hero__gradient"></div>
     </div>
     <div class="container hero__inner">
-      <div class="hero__content animate-fade-in-up">
+      <div class="hero__left animate-fade-in-up">
         <span class="hero__badge">Przewodnik po copywritingu</span>
         <h1 class="hero__title">
           Słowa, które
@@ -75,23 +61,43 @@ const websiteSchema = {
           — w&nbsp;jednym, kompletnym źródle.
         </p>
         <div class="hero__actions">
-          <a href="/co-to-jest-copywriting/" class="btn btn--primary">
+          <a href="/blog/copywriting-co-to-jest/" class="btn btn--primary">
             Zacznij od podstaw
           </a>
-          <a href="/formuly-copywriterskie/" class="btn btn--outline">
+          <a href="/blog/formuly-copywriterskie/" class="btn btn--outline">
             Poznaj formuły
           </a>
         </div>
       </div>
-      <div class="hero__stats animate-fade-in-up" style="animation-delay: 0.2s">
+
+      <div class="hero__right animate-fade-in-up" style="animation-delay: 0.15s">
+        <div class="hero__visual">
+          <div class="hero__visual-card hero__visual-card--1">
+            <span class="hero__visual-formula">AIDA</span>
+            <span class="hero__visual-sub">Attention → Interest → Desire → Action</span>
+          </div>
+          <div class="hero__visual-card hero__visual-card--2">
+            <span class="hero__visual-formula">PAS</span>
+            <span class="hero__visual-sub">Problem → Agitate → Solution</span>
+          </div>
+          <div class="hero__visual-card hero__visual-card--3">
+            <span class="hero__visual-formula">BAB</span>
+            <span class="hero__visual-sub">Before → After → Bridge</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__stats animate-fade-in-up" style="animation-delay: 0.25s">
         <div class="hero__stat">
-          <span class="hero__stat-num">225+</span>
+          <span class="hero__stat-num">{allPosts.length}+</span>
           <span class="hero__stat-label">artykułów</span>
         </div>
+        <div class="hero__stat-divider"></div>
         <div class="hero__stat">
-          <span class="hero__stat-num">12</span>
+          <span class="hero__stat-num">{SILOS.length}</span>
           <span class="hero__stat-label">kategorii</span>
         </div>
+        <div class="hero__stat-divider"></div>
         <div class="hero__stat">
           <span class="hero__stat-num">15+</span>
           <span class="hero__stat-label">formuł</span>
@@ -105,16 +111,19 @@ const websiteSchema = {
     <div class="container">
       <div class="section__header">
         <h2 class="section__title">Baza wiedzy</h2>
-        <p class="section__desc">12 kategorii — od&nbsp;definicji po&nbsp;zaawansowane techniki perswazji.</p>
+        <p class="section__desc">
+          {SILOS.length} kategorii — od&nbsp;definicji po&nbsp;zaawansowane techniki perswazji.
+        </p>
       </div>
       <div class="silos-grid stagger">
-        {SILOS.map((silo) => (
+        {siloCounts.map((silo) => (
           <SiloCard
             title={silo.title}
             description={silo.description}
             href={`/${silo.slug}/`}
             icon={silo.icon}
             color={silo.color}
+            count={silo.count}
           />
         ))}
       </div>
@@ -129,14 +138,17 @@ const websiteSchema = {
         <p class="section__desc">Najważniejsze artykuły, od których warto zacząć przygodę z copywritingiem.</p>
       </div>
       <div class="articles-grid stagger">
-        {featuredArticles.map((article) => (
+        {featuredArticles.map((post, i) => post && (
           <ArticleCard
-            title={article.title}
-            description={article.description}
-            href={article.href}
-            category={article.category}
-            date={article.date}
-            readingTime={article.readingTime}
+            title={post.data.title}
+            description={post.data.description}
+            href={`/blog/${post.slug}/`}
+            category={post.data.category}
+            date={post.data.publishDate}
+            readingTime={post.data.readingTime}
+            image={post.data.image}
+            imageAlt={post.data.imageAlt}
+            featured={i === 0}
           />
         ))}
       </div>
@@ -154,7 +166,7 @@ const websiteSchema = {
             AIDA, PAS, BAB, 4P, FAB — poznaj schematy pisania, które od&nbsp;dekad generują
             milionowe zyski. Każda formuła z&nbsp;wyjaśnieniem i&nbsp;przykładami.
           </p>
-          <a href="/formuly-copywriterskie/" class="btn btn--primary">
+          <a href="/blog/formuly-copywriterskie/" class="btn btn--primary">
             Poznaj formuły →
           </a>
         </div>
@@ -193,10 +205,10 @@ const websiteSchema = {
 </BaseLayout>
 
 <style>
-  /* ===== HERO ===== */
+  /* ===== HERO — two column ===== */
   .hero {
     position: relative;
-    padding: var(--space-5xl) 0 var(--space-4xl);
+    padding: var(--space-5xl) 0 var(--space-3xl);
     overflow: hidden;
   }
 
@@ -226,6 +238,26 @@ const websiteSchema = {
   .hero__inner {
     position: relative;
     z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: var(--space-2xl) var(--space-3xl);
+    align-items: center;
+  }
+
+  .hero__left {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .hero__right {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .hero__stats {
+    grid-column: 1 / -1;
+    grid-row: 2;
   }
 
   .hero__badge {
@@ -259,7 +291,7 @@ const websiteSchema = {
     font-size: var(--text-lg);
     color: var(--color-ink-muted);
     line-height: var(--leading-relaxed);
-    max-width: 52ch;
+    max-width: 48ch;
     margin-bottom: var(--space-2xl);
   }
 
@@ -269,29 +301,92 @@ const websiteSchema = {
     flex-wrap: wrap;
   }
 
+  /* Visual cards on right */
+  .hero__visual {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    max-width: 380px;
+    margin-left: auto;
+  }
+
+  .hero__visual-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    padding: var(--space-lg) var(--space-xl);
+    background: white;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-base);
+  }
+
+  .hero__visual-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .hero__visual-card--1 {
+    transform: translateX(0);
+  }
+
+  .hero__visual-card--2 {
+    transform: translateX(16px);
+  }
+
+  .hero__visual-card--3 {
+    transform: translateX(32px);
+  }
+
+  .hero__visual-card--1:hover { transform: translateX(0) translateY(-2px); }
+  .hero__visual-card--2:hover { transform: translateX(16px) translateY(-2px); }
+  .hero__visual-card--3:hover { transform: translateX(32px) translateY(-2px); }
+
+  .hero__visual-formula {
+    font-family: var(--font-mono);
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--color-accent);
+    min-width: 52px;
+  }
+
+  .hero__visual-sub {
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+  }
+
+  /* Stats — improved with dividers */
   .hero__stats {
     display: flex;
-    gap: var(--space-3xl);
-    margin-top: var(--space-4xl);
+    align-items: center;
+    gap: var(--space-2xl);
     padding-top: var(--space-2xl);
     border-top: 1px solid var(--color-border);
   }
 
   .hero__stat {
     display: flex;
-    flex-direction: column;
-    gap: var(--space-xs);
+    align-items: baseline;
+    gap: var(--space-sm);
   }
 
   .hero__stat-num {
     font-family: var(--font-display);
     font-size: var(--text-3xl);
     color: var(--color-ink);
+    letter-spacing: -0.02em;
   }
 
   .hero__stat-label {
     font-size: var(--text-sm);
     color: var(--color-ink-subtle);
+  }
+
+  .hero__stat-divider {
+    width: 1px;
+    height: 32px;
+    background: var(--color-border);
   }
 
   /* ===== BUTTONS ===== */
@@ -360,14 +455,12 @@ const websiteSchema = {
     margin-bottom: 0;
   }
 
-  /* Silos grid */
   .silos-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: var(--space-md);
   }
 
-  /* Articles grid */
   .articles-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -384,7 +477,6 @@ const websiteSchema = {
   .section--formulas {
     background: var(--color-ink);
     color: white;
-    border-radius: 0;
   }
 
   .formulas__inner {
@@ -453,6 +545,29 @@ const websiteSchema = {
 
   /* ===== RESPONSIVE ===== */
   @media (max-width: 1024px) {
+    .hero__inner {
+      grid-template-columns: 1fr;
+    }
+
+    .hero__right {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .hero__stats {
+      grid-row: 3;
+    }
+
+    .hero__visual {
+      max-width: 100%;
+      margin-left: 0;
+    }
+
+    .hero__visual-card--2 { transform: translateX(0); }
+    .hero__visual-card--3 { transform: translateX(0); }
+    .hero__visual-card--2:hover { transform: translateY(-2px); }
+    .hero__visual-card--3:hover { transform: translateY(-2px); }
+
     .silos-grid {
       grid-template-columns: repeat(2, 1fr);
     }
@@ -477,7 +592,11 @@ const websiteSchema = {
     }
 
     .hero__stats {
-      gap: var(--space-2xl);
+      gap: var(--space-xl);
+    }
+
+    .hero__stat-divider {
+      height: 24px;
     }
   }
 
@@ -488,6 +607,10 @@ const websiteSchema = {
 
     .btn {
       justify-content: center;
+    }
+
+    .hero__stats {
+      flex-wrap: wrap;
     }
   }
 </style>

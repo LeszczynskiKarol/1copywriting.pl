@@ -3,6 +3,7 @@ import BaseLayout from './BaseLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import TableOfContents from '@/components/TableOfContents.astro';
 import Newsletter from '@/components/Newsletter.astro';
+import PromoBanner from '@/components/PromoBanner.astro';
 import { SITE } from '@/utils/config';
 
 interface Props {
@@ -118,9 +119,18 @@ const breadcrumbs = [
       </header>
 
       {image && (
-        <div class="article__hero-image">
-          <img src={image} alt={imageAlt || title} loading="eager" />
-        </div>
+        <figure class="article__hero">
+          <img
+            src={image}
+            alt={imageAlt || title}
+            class="article__hero-img"
+            loading="eager"
+            decoding="async"
+          />
+          {imageAlt && imageAlt !== title && (
+            <figcaption class="article__hero-caption">{imageAlt}</figcaption>
+          )}
+        </figure>
       )}
 
       <div class="article__body">
@@ -129,8 +139,12 @@ const breadcrumbs = [
           <slot />
         </div>
 
-        <aside class="article__sidebar">
-          <div class="article__sidebar-sticky">
+        <!-- Sidebar: the outer div is the grid cell (full height),
+             the inner div gets JS-driven position:fixed -->
+        <aside class="article__sidebar" id="js-sidebar-track">
+          <div class="article__sidebar-inner" id="js-sidebar-sticky">
+            <PromoBanner />
+
             {tags.length > 0 && (
               <div class="article__tags">
                 <h4 class="article__sidebar-title">Tagi</h4>
@@ -152,13 +166,83 @@ const breadcrumbs = [
   </article>
 </BaseLayout>
 
+<!-- ============================================
+     JS-POWERED STICKY SIDEBAR
+     Uses position:fixed — works regardless of
+     overflow:hidden on ANY ancestor element.
+     ============================================ -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const track = document.getElementById('js-sidebar-track') as HTMLElement;
+    const panel = document.getElementById('js-sidebar-sticky') as HTMLElement;
+    if (!track || !panel) return;
+
+    // Only activate on wide screens where sidebar is visible
+    const MQ = window.matchMedia('(min-width: 1100px)');
+
+    const TOP_GAP = 96; // header (72) + breathing room (24)
+
+    function reset() {
+      panel.style.position = '';
+      panel.style.top = '';
+      panel.style.bottom = '';
+      panel.style.left = '';
+      panel.style.width = '';
+    }
+
+    function update() {
+      if (!MQ.matches) { reset(); return; }
+
+      const trackRect = track.getBoundingClientRect();
+      const panelH = panel.offsetHeight;
+      const trackW = track.offsetWidth;
+
+      // 1) Track hasn't scrolled into sticky zone yet → static
+      if (trackRect.top >= TOP_GAP) {
+        panel.style.position = 'relative';
+        panel.style.top = '0';
+        panel.style.bottom = '';
+        panel.style.left = '';
+        panel.style.width = '';
+        return;
+      }
+
+      // 2) Track bottom is close → anchor panel to bottom of track
+      if (trackRect.bottom <= panelH + TOP_GAP) {
+        panel.style.position = 'absolute';
+        panel.style.top = 'auto';
+        panel.style.bottom = '0';
+        panel.style.left = '0';
+        panel.style.width = trackW + 'px';
+        return;
+      }
+
+      // 3) Otherwise → fixed to viewport
+      panel.style.position = 'fixed';
+      panel.style.top = TOP_GAP + 'px';
+      panel.style.bottom = '';
+      panel.style.left = trackRect.left + 'px';
+      panel.style.width = trackW + 'px';
+    }
+
+    // The track must be position:relative for the absolute fallback
+    track.style.position = 'relative';
+
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', () => { reset(); update(); }, { passive: true });
+    MQ.addEventListener('change', () => { reset(); update(); });
+
+    update();
+  });
+</script>
+
 <style>
   .article {
     padding-top: var(--space-2xl);
     padding-bottom: var(--space-4xl);
   }
 
-  /* Header */
+  /* ===== HEADER ===== */
   .article__header {
     max-width: var(--max-content);
     margin-bottom: var(--space-2xl);
@@ -219,37 +303,50 @@ const breadcrumbs = [
     color: var(--color-ink-light);
   }
 
-  /* Hero image */
-  .article__hero-image {
+  /* ===== HERO IMAGE ===== */
+  .article__hero {
     max-width: var(--max-wide);
     margin-bottom: var(--space-3xl);
-    border-radius: var(--radius-xl);
-    overflow: hidden;
   }
 
-  .article__hero-image img {
+  .article__hero-img {
     width: 100%;
-    aspect-ratio: 2/1;
+    aspect-ratio: 21/9;
     object-fit: cover;
+    border-radius: var(--radius-xl);
   }
 
-  /* Body with sidebar */
+  .article__hero-caption {
+    margin-top: var(--space-sm);
+    font-size: var(--text-xs);
+    color: var(--color-ink-subtle);
+    text-align: center;
+    font-style: italic;
+  }
+
+  /* ===== BODY GRID ===== */
   .article__body {
     display: grid;
-    grid-template-columns: var(--max-content) 1fr;
-    gap: var(--space-4xl);
-    align-items: start;
+    grid-template-columns: minmax(0, var(--max-content)) 280px;
+    gap: var(--space-3xl);
   }
 
+  /* Sidebar: let grid stretch it to full content height.
+     Do NOT set align-self:start — we need the full height
+     so the JS can position the inner panel correctly. */
   .article__sidebar {
     display: none;
   }
 
-  .article__sidebar-sticky {
-    position: sticky;
-    top: calc(var(--header-height) + var(--space-2xl));
+  .article__sidebar-inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+    /* z-index so it stays above content when fixed */
+    z-index: 10;
   }
 
+  /* Tags */
   .article__sidebar-title {
     font-family: var(--font-body);
     font-weight: 600;
@@ -276,25 +373,33 @@ const breadcrumbs = [
     border: 1px solid var(--color-border-light);
   }
 
-  /* Footer */
+  /* ===== FOOTER ===== */
   .article__footer {
     max-width: var(--max-content);
     margin-top: var(--space-4xl);
   }
 
+  /* ===== RESPONSIVE ===== */
   @media (min-width: 1100px) {
     .article__sidebar {
       display: block;
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1099px) {
     .article__body {
       grid-template-columns: 1fr;
     }
+  }
 
+  @media (max-width: 768px) {
     .article__title {
       font-size: var(--text-3xl);
+    }
+
+    .article__hero-img {
+      aspect-ratio: 16/9;
+      border-radius: var(--radius-lg);
     }
   }
 </style>
