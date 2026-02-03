@@ -1,7 +1,9 @@
 ---
 title: "Research w copywritingu - jak zbierać informacje do pisania skutecznych tekstów"
 description: "Poznaj metody badania odbiorców, produktu i rynku w copywritingu. Voice of Customer, review mining, analiza konkurencji i inne techniki, które zmienią jakość Twoich tekstów."
-publishDate: 2025-01-17
+publishDate: 2026-01-17
+image: "/images/blog/research.jpg"
+imageAlt: "Research w copywritingu"
 tags:
   [
     "research copywriterski",
@@ -10,6 +12,8 @@ tags:
     "copywriting",
   ]
 keyword: "research w copywritingu"
+category: "Proces i warsztat"
+silo: "proces-i-warsztat"
 priority: high
 relatedPosts:
   - proces-pisania-copy

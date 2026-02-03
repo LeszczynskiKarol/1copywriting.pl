@@ -17,7 +17,7 @@ tags:
   ]
 keyword: "jak pisać cta"
 priority: "high"
-image: "/images/blog/jak-pisac-cta.jpg"
+image: "/images/blog/cta.jpg"
 imageAlt: "Jak pisać CTA"
 readingTime: 17
 relatedPosts:

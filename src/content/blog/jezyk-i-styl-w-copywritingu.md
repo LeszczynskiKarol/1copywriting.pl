@@ -6,6 +6,8 @@ tags: ["copywriting", "język", "styl", "ton-głosu", "pisanie"]
 keyword: "język i styl w copywritingu"
 silo: "jezyk-i-styl"
 category: "Język i styl"
+image: "/images/blog/jezyk-i-styl.jpg"
+imageAlt: "Język i styl w copywritingu"
 priority: "high"
 relatedPosts:
   - "jak-pisac-prosto"

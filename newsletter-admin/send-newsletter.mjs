@@ -3,7 +3,11 @@
 // Usage: node send-newsletter.mjs --subject "Tytuł" --html newsletter.html [--test email@test.pl]
 
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, ScanCommand } from "@aws-sdk/lib-dynamodb";
+import {
+  DynamoDBDocumentClient,
+  ScanCommand,
+  GetCommand,
+} from "@aws-sdk/lib-dynamodb";
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 import { readFileSync } from "fs";
 import { parseArgs } from "util";
@@ -11,7 +15,6 @@ import { parseArgs } from "util";
 // Config
 const TABLE_NAME = "1copywriting-newsletter";
 const FROM_EMAIL = "newsletter@1copywriting.pl";
-const SITE_URL = "https://www.1copywriting.pl";
 
 const dynamoClient = new DynamoDBClient({ region: "eu-central-1" });
 const docClient = DynamoDBDocumentClient.from(dynamoClient);
@@ -54,9 +57,20 @@ async function getSubscribers() {
       TableName: TABLE_NAME,
       FilterExpression: "confirmed = :confirmed",
       ExpressionAttributeValues: { ":confirmed": true },
-    })
+    }),
   );
   return result.Items || [];
+}
+
+// Get single subscriber by email
+async function getSubscriberByEmail(email) {
+  const result = await docClient.send(
+    new GetCommand({
+      TableName: TABLE_NAME,
+      Key: { email: email.toLowerCase().trim() },
+    }),
+  );
+  return result.Item || null;
 }
 
 // Generate unsubscribe link
@@ -73,7 +87,7 @@ function addUnsubscribeFooter(html, email, token) {
       <p><a href="${unsubscribeUrl}" style="color: #888;">Wypisz się z newslettera</a></p>
     </div>
   `;
-  
+
   // Insert before </body> or at the end
   if (html.includes("</body>")) {
     return html.replace("</body>", `${footer}</body>`);
@@ -84,16 +98,16 @@ function addUnsubscribeFooter(html, email, token) {
 // Send email to one subscriber
 async function sendEmail(subscriber, subject, htmlTemplate) {
   const { email, token, name } = subscriber;
-  
+
   // Personalize HTML
   let html = htmlTemplate
     .replace(/\{\{email\}\}/g, email)
     .replace(/\{\{name\}\}/g, name || "")
     .replace(/\{\{greeting\}\}/g, name ? `Cześć ${name}!` : "Cześć!");
-  
+
   // Add unsubscribe footer
   html = addUnsubscribeFooter(html, email, token);
-  
+
   // Plain text version
   const text = `${subject}\n\nAby zobaczyć pełną wersję, otwórz email w przeglądarce.\n\nWypisz się: ${getUnsubscribeUrl(email, token)}`;
 
@@ -108,7 +122,7 @@ async function sendEmail(subscriber, subject, htmlTemplate) {
           Text: { Data: text, Charset: "UTF-8" },
         },
       },
-    })
+    }),
   );
 }
 
@@ -128,13 +142,28 @@ async function main() {
   // Get recipients
   let recipients;
   if (test) {
-    // Test mode - send only to specified email
+    // Test mode - try to get real subscriber data for working unsubscribe link
     console.log(`\n🧪 TRYB TESTOWY - wysyłka tylko do: ${test}\n`);
-    recipients = [{ email: test, token: "test-token", name: "" }];
+
+    const testSubscriber = await getSubscriberByEmail(test);
+    if (testSubscriber) {
+      recipients = [testSubscriber];
+      console.log(`   ✓ Znaleziono w bazie - link wypisania będzie działać\n`);
+    } else {
+      // Email not in DB - use dummy token (unsubscribe won't work)
+      recipients = [
+        { email: test, token: "test-token-unsubscribe-disabled", name: "" },
+      ];
+      console.log(
+        `   ⚠ Email nie jest w bazie - link wypisania NIE będzie działać\n`,
+      );
+    }
   } else {
     recipients = await getSubscribers();
-    console.log(`\n📋 Znaleziono ${recipients.length} potwierdzonych subskrybentów\n`);
-    
+    console.log(
+      `\n📋 Znaleziono ${recipients.length} potwierdzonych subskrybentów\n`,
+    );
+
     if (recipients.length === 0) {
       console.log("Brak subskrybentów do wysyłki.");
       process.exit(0);
@@ -143,9 +172,11 @@ async function main() {
     // Confirmation
     console.log(`Temat: "${subject}"`);
     console.log(`Szablon: ${htmlPath}`);
-    console.log(`\nCzy na pewno chcesz wysłać newsletter do ${recipients.length} osób?`);
+    console.log(
+      `\nCzy na pewno chcesz wysłać newsletter do ${recipients.length} osób?`,
+    );
     console.log('Wpisz "TAK" aby kontynuować:');
-    
+
     const readline = await import("readline");
     const rl = readline.createInterface({
       input: process.stdin,
@@ -165,7 +196,7 @@ async function main() {
 
   // Send emails
   console.log("\n📧 Wysyłanie...\n");
-  
+
   let sent = 0;
   let failed = 0;
 
@@ -174,7 +205,7 @@ async function main() {
       await sendEmail(subscriber, subject, htmlTemplate);
       sent++;
       console.log(`  ✓ ${subscriber.email}`);
-      
+
       // Rate limiting - SES allows 14/sec, we'll do 10/sec to be safe
       if (!test) {
         await new Promise((r) => setTimeout(r, 100));

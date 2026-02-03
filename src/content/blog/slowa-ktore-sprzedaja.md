@@ -14,6 +14,8 @@ category: "Przykłady"
 silo: "przyklady-copywritingu"
 keyword: "słowa które sprzedają"
 priority: "high"
+image: "/images/blog/slowa-ktore-sprzedaja.jpg"
+imageAlt: "Słowa, które sprzedają"
 relatedPosts:
   - "power-words"
   - "jak-pisac-perswazyjnie"

@@ -5,6 +5,8 @@ publishDate: 2025-01-15
 tags:
   ["formuły copywriterskie", "AIDA", "PAS", "copywriting", "techniki pisania"]
 keyword: "która formuła copywriterska"
+category: "Formuły copywriterskie"
+silo: "formuly-copywriterskie"
 priority: high
 relatedPosts:
   - struktura-tekstu-copywriterskiego

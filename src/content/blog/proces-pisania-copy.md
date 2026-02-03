@@ -4,6 +4,8 @@ description: "Poznaj profesjonalny proces tworzenia tekstów copywriterskich kro
 publishDate: 2025-01-16
 tags: ["proces copywriterski", "workflow", "pisanie copy", "copywriting"]
 keyword: "proces pisania copy"
+category: "Proces i warsztat"
+silo: "proces-i-warsztat"
 priority: high
 relatedPosts:
   - research-w-copywritingu

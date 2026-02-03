@@ -2,6 +2,8 @@
 title: "Brief copywriterski - jak zbierać informacje od klienta przed projektem"
 description: "Kompletny przewodnik po briefie copywriterskim. 40+ pytań do zadania klientowi, gotowy szablon briefu i wskazówki jak wyciągnąć informacje potrzebne do napisania skutecznego tekstu."
 publishDate: 2025-01-18
+category: "Proces i warsztat"
+silo: "proces-i-warsztat"
 tags:
   [
     "brief copywriterski",

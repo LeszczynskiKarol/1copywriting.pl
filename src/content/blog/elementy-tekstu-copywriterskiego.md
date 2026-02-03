@@ -7,6 +7,8 @@ tags:
 silo: "jak-pisac"
 category: "Jak pisać"
 keyword: "elementy tekstu copywriterskiego"
+image: "/images/blog/elementy-tekstu.jpg"
+imageAlt: "Elementy tekstu copywriterskiego"
 priority: "high"
 relatedPosts:
   - "struktura-tekstu-copywriterskiego"
