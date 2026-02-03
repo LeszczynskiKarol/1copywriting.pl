@@ -3,6 +3,7 @@ import '@/styles/global.css';
 import SEOHead from '@/components/SEOHead.astro';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
+import CookieBanner from '@/components/CookieBanner.astro';
 import { SITE, SCHEMA_ORG } from '@/utils/config';
 
 interface Props {
@@ -34,7 +35,24 @@ const props = Astro.props;
     />
   </head>
   <body>
-    <a href="#main" class="sr-only" style="position:fixed;top:0;left:0;z-index:1000;padding:1rem;background:var(--color-accent);color:white;transform:translateY(-100%);transition:transform .2s;" onfocus="this.style.transform='translateY(0)'" onblur="this.style.transform='translateY(-100%)'">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-WZ5ZXCMT"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+      ></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <a
+      href="#main"
+      class="sr-only"
+      style="position:fixed;top:0;left:0;z-index:1000;padding:1rem;background:var(--color-accent);color:white;transform:translateY(-100%);transition:transform .2s;"
+      onfocus="this.style.transform='translateY(0)'"
+      onblur="this.style.transform='translateY(-100%)'"
+    >
       Przejdź do treści
     </a>
     <Header />
@@ -42,5 +60,8 @@ const props = Astro.props;
       <slot />
     </main>
     <Footer />
+
+    <!-- Cookie Banner with GDPR consent -->
+    <CookieBanner />
   </body>
 </html>

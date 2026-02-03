@@ -59,6 +59,17 @@ const footerSilos2 = SILOS.slice(6);
     <p class="footer__copy">
       &copy; {year} {SITE.title}. Wszelkie prawa zastrzeżone.
     </p>
+    <div class="footer__legal">
+      <a href="/polityka-prywatnosci/">Polityka prywatności</a>
+      <span class="footer__legal-sep">|</span>
+      <button
+        type="button"
+        onclick="openCookieSettings()"
+        class="footer__cookie-btn"
+      >
+        Ustawienia cookies
+      </button>
+    </div>
   </div>
 </footer>
 
@@ -151,12 +162,49 @@ const footerSilos2 = SILOS.slice(6);
     align-items: center;
     padding-top: var(--space-xl);
     padding-bottom: var(--space-xl);
+    flex-wrap: wrap;
+    gap: var(--space-md);
   }
 
   .footer__copy {
     font-size: var(--text-xs);
     color: #6b7280;
     margin-bottom: 0;
+  }
+
+  .footer__legal {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--text-xs);
+  }
+
+  .footer__legal a {
+    color: #6b7280;
+    transition: color var(--transition-fast);
+  }
+
+  .footer__legal a:hover {
+    color: #9ca3af;
+  }
+
+  .footer__legal-sep {
+    color: #4b5563;
+  }
+
+  .footer__cookie-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+    font-size: inherit;
+    color: #6b7280;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+  }
+
+  .footer__cookie-btn:hover {
+    color: #9ca3af;
   }
 
   @media (max-width: 1024px) {
@@ -173,6 +221,11 @@ const footerSilos2 = SILOS.slice(6);
   @media (max-width: 768px) {
     .footer__columns {
       grid-template-columns: 1fr 1fr;
+    }
+
+    .footer__bottom {
+      flex-direction: column;
+      text-align: center;
     }
   }
 
