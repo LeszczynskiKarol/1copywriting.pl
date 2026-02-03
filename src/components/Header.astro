@@ -69,7 +69,7 @@ const currentPath = Astro.url.pathname;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--color-border-light);
-    height: var(--header-height);
+    height: var(--header-height, 72px);
     transition: box-shadow var(--transition-base);
   }
 
@@ -145,12 +145,13 @@ const currentPath = Astro.url.pathname;
     flex-direction: column;
     justify-content: center;
     gap: 5px;
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
     background: none;
     border: none;
     cursor: pointer;
-    padding: 6px;
+    padding: 10px;
+    margin-right: -10px;
   }
 
   .header__burger-line {
@@ -175,47 +176,81 @@ const currentPath = Astro.url.pathname;
     transform: rotate(-45deg) translate(5px, -5px);
   }
 
-  /* Mobile menu */
+  /* Mobile menu - hidden by default */
   .mobile-menu {
-    display: none;
     position: fixed;
-    top: var(--header-height);
+    top: var(--header-height, 72px);
     left: 0;
     right: 0;
     bottom: 0;
-    background: var(--color-paper);
-    padding: var(--space-xl);
+    background: var(--color-paper, #fafaf8);
+    padding: var(--space-lg, 24px);
     z-index: 99;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    
+    /* Hidden state */
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: 
+      visibility 0s linear 0.2s,
+      opacity 0.2s ease,
+      transform 0.2s ease;
   }
 
   .mobile-menu.is-open {
-    display: block;
-    animation: fadeIn 0.2s ease;
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+    transition: 
+      visibility 0s linear 0s,
+      opacity 0.2s ease,
+      transform 0.2s ease;
   }
 
   .mobile-menu__list {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: var(--space-xs);
+    gap: var(--space-xs, 8px);
+    padding: 0;
+    margin: 0;
   }
 
   .mobile-menu__link {
     display: block;
-    padding: var(--space-md) var(--space-lg);
-    font-family: var(--font-display);
-    font-size: var(--text-xl);
-    color: var(--color-ink);
-    border-radius: var(--radius-md);
-    transition: background var(--transition-fast);
+    padding: var(--space-md, 16px) var(--space-lg, 24px);
+    font-family: var(--font-display, Georgia, serif);
+    font-size: var(--text-xl, 1.25rem);
+    color: var(--color-ink, #1a1a1a);
+    border-radius: var(--radius-md, 8px);
+    transition: background var(--transition-fast, 0.15s ease);
+    text-decoration: none;
   }
 
-  .mobile-menu__link:hover {
-    background: var(--color-paper-alt);
-    color: var(--color-accent);
+  .mobile-menu__link:hover,
+  .mobile-menu__link:focus {
+    background: var(--color-paper-alt, #f5f5f3);
+    color: var(--color-accent, #C03E2E);
   }
 
+  /* Desktop: show nav, hide burger */
+  @media (min-width: 1025px) {
+    .header__nav {
+      display: block;
+    }
+
+    .header__burger {
+      display: none;
+    }
+
+    .mobile-menu {
+      display: none !important;
+    }
+  }
+
+  /* Mobile/Tablet: hide nav, show burger */
   @media (max-width: 1024px) {
     .header__nav {
       display: none;
@@ -225,6 +260,18 @@ const currentPath = Astro.url.pathname;
       display: flex;
     }
   }
+
+  /* Extra small screens - adjust padding */
+  @media (max-width: 480px) {
+    .mobile-menu {
+      padding: var(--space-md, 16px);
+    }
+
+    .mobile-menu__link {
+      padding: var(--space-md, 16px);
+      font-size: var(--text-lg, 1.125rem);
+    }
+  }
 </style>
 
 <script>
@@ -232,26 +279,54 @@ const currentPath = Astro.url.pathname;
   const header = document.getElementById('header');
   window.addEventListener('scroll', () => {
     header?.classList.toggle('is-scrolled', window.scrollY > 10);
-  });
+  }, { passive: true });
 
   // Mobile menu toggle
   const toggle = document.getElementById('menuToggle');
   const menu = document.getElementById('mobileMenu');
 
+  function closeMenu() {
+    toggle?.classList.remove('is-open');
+    menu?.classList.remove('is-open');
+    toggle?.setAttribute('aria-expanded', 'false');
+    menu?.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  function openMenu() {
+    toggle?.classList.add('is-open');
+    menu?.classList.add('is-open');
+    toggle?.setAttribute('aria-expanded', 'true');
+    menu?.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
   toggle?.addEventListener('click', () => {
-    const isOpen = toggle.classList.toggle('is-open');
-    menu?.classList.toggle('is-open', isOpen);
-    toggle.setAttribute('aria-expanded', String(isOpen));
-    menu?.setAttribute('aria-hidden', String(!isOpen));
-    document.body.style.overflow = isOpen ? 'hidden' : '';
+    const isOpen = toggle.classList.contains('is-open');
+    if (isOpen) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
   });
 
   // Close mobile menu on link click
   menu?.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      toggle?.classList.remove('is-open');
-      menu?.classList.remove('is-open');
-      document.body.style.overflow = '';
-    });
+    link.addEventListener('click', closeMenu);
   });
+
+  // Close menu on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menu?.classList.contains('is-open')) {
+      closeMenu();
+      toggle?.focus();
+    }
+  });
+
+  // Close menu on resize to desktop
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 1024 && menu?.classList.contains('is-open')) {
+      closeMenu();
+    }
+  }, { passive: true });
 </script>
