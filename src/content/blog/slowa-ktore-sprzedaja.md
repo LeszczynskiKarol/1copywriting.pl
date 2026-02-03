@@ -10,6 +10,8 @@ tags:
     "konwersja",
     "psychologia",
   ]
+category: "Przykłady"
+silo: "przyklady-copywritingu"
 keyword: "słowa które sprzedają"
 priority: "high"
 relatedPosts:

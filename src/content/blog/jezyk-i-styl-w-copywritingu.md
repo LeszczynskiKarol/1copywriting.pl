@@ -4,6 +4,8 @@ description: "Poznaj zasady języka copywriterskiego — od długości zdań prz
 publishDate: 2026-02-03
 tags: ["copywriting", "język", "styl", "ton-głosu", "pisanie"]
 keyword: "język i styl w copywritingu"
+silo: "jezyk-i-styl"
+category: "Język i styl"
 priority: "high"
 relatedPosts:
   - "jak-pisac-prosto"
