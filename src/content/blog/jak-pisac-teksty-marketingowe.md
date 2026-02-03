@@ -4,6 +4,8 @@ description: "Naucz się pisać teksty marketingowe, które sprzedają. Praktycz
 publishDate: 2026-01-19
 tags: ["teksty marketingowe", "copywriting", "marketing", "sprzedaż"]
 keyword: "jak pisać teksty marketingowe"
+image: "/images/blog/jak-pisac-teksty-marketingowe.jpg"
+imageAlt: "Jak pisać teksty marketingowe"
 category: "Jak pisać"
 silo: "jak-pisac"
 relatedPosts:

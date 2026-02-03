@@ -4,6 +4,8 @@ description: "Kompletny przewodnik po briefie copywriterskim. 40+ pytań do zada
 publishDate: 2025-01-18
 category: "Proces i warsztat"
 silo: "proces-i-warsztat"
+image: "/images/blog/przyklady-dobrych-naglowkow.jpg"
+imageAlt: "Przykłady dobrych nagłówków"
 tags:
   [
     "brief copywriterski",

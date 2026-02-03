@@ -5,6 +5,8 @@ publishDate: 2026-02-01
 tags: ["przykłady copywritingu", "reklamy", "landing page", "copywriting"]
 keyword: "przykłady copywritingu"
 category: "Przykłady"
+image: "/images/blog/przyklady-copywritingu.jpg"
+imageAlt: "Przykłady copywritingu"
 silo: "przyklady-copywritingu"
 priority: high
 relatedPosts:

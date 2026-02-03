@@ -4,6 +4,8 @@ description: "Najlepsze przykłady nagłówków copywriterskich z analizą dlacz
 publishDate: 2025-01-19
 category: "Przykłady"
 silo: "przyklady-copywritingu"
+image: "/images/blog/przyklady-dobrych-naglowkow.jpg"
+imageAlt: "Przykłady dobrych nagłówków"
 tags: ["nagłówki", "copywriting", "przykłady", "konwersje"]
 keyword: "przykłady dobrych nagłówków"
 priority: high

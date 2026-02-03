@@ -6,6 +6,8 @@ category: "Przykłady"
 silo: "przyklady-copywritingu"
 tags: ["CTA", "call to action", "konwersje", "copywriting"]
 keyword: "przykłady skutecznych CTA"
+image: "/images/blog/przyklady-cta.jpg"
+imageAlt: "Przykłady skutecznych CTA"
 priority: high
 relatedPosts:
   - jak-pisac-cta

@@ -6,6 +6,8 @@ tags:
   ["formuły copywriterskie", "AIDA", "PAS", "copywriting", "techniki pisania"]
 keyword: "która formuła copywriterska"
 category: "Formuły copywriterskie"
+image: "/images/blog/ktora-formula.jpg"
+imageAlt: "Którą formułę wybrać?"
 silo: "formuly-copywriterskie"
 priority: high
 relatedPosts:
