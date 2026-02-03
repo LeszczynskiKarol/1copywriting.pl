@@ -4,6 +4,8 @@ description: "Poznaj wszystkie elementy składowe skutecznego tekstu copywriters
 publishDate: 2026-02-03
 tags:
   ["copywriting", "elementy-tekstu", "anatomia-copy", "struktura", "komponenty"]
+silo: "jak-pisac"
+category: "Jak pisać"
 keyword: "elementy tekstu copywriterskiego"
 priority: "high"
 relatedPosts:
