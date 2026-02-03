@@ -1,0 +1,42 @@
+{
+  "CallerReference": "redirect-1copywriting-1738574401",
+  "Comment": "1copywriting.pl - redirect to www",
+  "Enabled": true,
+  "Aliases": {
+    "Quantity": 1,
+    "Items": ["1copywriting.pl"]
+  },
+  "Origins": {
+    "Quantity": 1,
+    "Items": [{
+      "Id": "S3-1copywriting.pl-redirect",
+      "DomainName": "1copywriting.pl.s3-website.eu-central-1.amazonaws.com",
+      "CustomOriginConfig": {
+        "HTTPPort": 80,
+        "HTTPSPort": 443,
+        "OriginProtocolPolicy": "http-only"
+      }
+    }]
+  },
+  "DefaultCacheBehavior": {
+    "TargetOriginId": "S3-1copywriting.pl-redirect",
+    "ViewerProtocolPolicy": "redirect-to-https",
+    "AllowedMethods": {
+      "Quantity": 2,
+      "Items": ["GET", "HEAD"],
+      "CachedMethods": {
+        "Quantity": 2,
+        "Items": ["GET", "HEAD"]
+      }
+    },
+    "Compress": true,
+    "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6"
+  },
+  "ViewerCertificate": {
+    "ACMCertificateArn": "arn:aws:acm:us-east-1:381492300277:certificate/b32a2d52-47d0-4e8c-b0a5-5f8edb4995dc",
+    "SSLSupportMethod": "sni-only",
+    "MinimumProtocolVersion": "TLSv1.2_2021"
+  },
+  "PriceClass": "PriceClass_100",
+  "HttpVersion": "http2and3"
+}
