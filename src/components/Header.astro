@@ -43,22 +43,85 @@ const currentPath = Astro.url.pathname;
       <span class="header__burger-line"></span>
     </button>
   </div>
-
-  <!-- Mobile menu -->
-  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
-    <nav aria-label="Menu mobilne">
-      <ul class="mobile-menu__list">
-        {NAV_ITEMS.map((item) => (
-          <li>
-            <a href={item.href} class="mobile-menu__link">
-              {item.label}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  </div>
 </header>
+
+<!-- Mobile menu - OUTSIDE header to avoid clipping issues -->
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <nav aria-label="Menu mobilne">
+    <ul class="mobile-menu__list">
+      {NAV_ITEMS.map((item) => (
+        <li>
+          <a href={item.href} class="mobile-menu__link">
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</div>
+
+<style is:global>
+  /* ==========================================
+     MOBILE MENU - full screen overlay
+     Must be global to work outside header
+     ========================================== */
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    background: #FAFAF8;
+    padding-top: 96px; /* header height + spacing */
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 24px;
+    z-index: 99;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    
+    /* Hidden by default */
+    display: none;
+  }
+
+  .mobile-menu.is-open {
+    display: block;
+  }
+
+  .mobile-menu__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .mobile-menu__link {
+    display: block;
+    padding: 16px 20px;
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.25rem;
+    color: #1A1A1A;
+    border-radius: 8px;
+    transition: background 0.15s ease;
+    text-decoration: none;
+  }
+
+  .mobile-menu__link:hover,
+  .mobile-menu__link:focus {
+    background: #F5F3EE;
+    color: #C03E2E;
+  }
+
+  /* Hide mobile menu on desktop */
+  @media (min-width: 1025px) {
+    .mobile-menu {
+      display: none !important;
+    }
+  }
+</style>
 
 <style>
   .header {
@@ -160,7 +223,7 @@ const currentPath = Astro.url.pathname;
     height: 2px;
     background: var(--color-ink);
     border-radius: 2px;
-    transition: all var(--transition-base);
+    transition: all 0.3s ease;
     transform-origin: center;
   }
 
@@ -176,65 +239,6 @@ const currentPath = Astro.url.pathname;
     transform: rotate(-45deg) translate(5px, -5px);
   }
 
-  /* Mobile menu - hidden by default */
-  .mobile-menu {
-    position: fixed;
-    top: var(--header-height, 72px);
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: var(--color-paper, #fafaf8);
-    padding: var(--space-lg, 24px);
-    z-index: 99;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    
-    /* Hidden state */
-    visibility: hidden;
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: 
-      visibility 0s linear 0.2s,
-      opacity 0.2s ease,
-      transform 0.2s ease;
-  }
-
-  .mobile-menu.is-open {
-    visibility: visible;
-    opacity: 1;
-    transform: translateY(0);
-    transition: 
-      visibility 0s linear 0s,
-      opacity 0.2s ease,
-      transform 0.2s ease;
-  }
-
-  .mobile-menu__list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xs, 8px);
-    padding: 0;
-    margin: 0;
-  }
-
-  .mobile-menu__link {
-    display: block;
-    padding: var(--space-md, 16px) var(--space-lg, 24px);
-    font-family: var(--font-display, Georgia, serif);
-    font-size: var(--text-xl, 1.25rem);
-    color: var(--color-ink, #1a1a1a);
-    border-radius: var(--radius-md, 8px);
-    transition: background var(--transition-fast, 0.15s ease);
-    text-decoration: none;
-  }
-
-  .mobile-menu__link:hover,
-  .mobile-menu__link:focus {
-    background: var(--color-paper-alt, #f5f5f3);
-    color: var(--color-accent, #C03E2E);
-  }
-
   /* Desktop: show nav, hide burger */
   @media (min-width: 1025px) {
     .header__nav {
@@ -242,10 +246,6 @@ const currentPath = Astro.url.pathname;
     }
 
     .header__burger {
-      display: none;
-    }
-
-    .mobile-menu {
       display: none !important;
     }
   }
@@ -260,73 +260,66 @@ const currentPath = Astro.url.pathname;
       display: flex;
     }
   }
-
-  /* Extra small screens - adjust padding */
-  @media (max-width: 480px) {
-    .mobile-menu {
-      padding: var(--space-md, 16px);
-    }
-
-    .mobile-menu__link {
-      padding: var(--space-md, 16px);
-      font-size: var(--text-lg, 1.125rem);
-    }
-  }
 </style>
 
 <script>
-  // Sticky header shadow
-  const header = document.getElementById('header');
-  window.addEventListener('scroll', () => {
-    header?.classList.toggle('is-scrolled', window.scrollY > 10);
-  }, { passive: true });
+  document.addEventListener('DOMContentLoaded', () => {
+    const header = document.getElementById('header');
+    const toggle = document.getElementById('menuToggle');
+    const menu = document.getElementById('mobileMenu');
 
-  // Mobile menu toggle
-  const toggle = document.getElementById('menuToggle');
-  const menu = document.getElementById('mobileMenu');
+    if (!toggle || !menu) return;
 
-  function closeMenu() {
-    toggle?.classList.remove('is-open');
-    menu?.classList.remove('is-open');
-    toggle?.setAttribute('aria-expanded', 'false');
-    menu?.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  }
+    // Sticky header shadow
+    window.addEventListener('scroll', () => {
+      header?.classList.toggle('is-scrolled', window.scrollY > 10);
+    }, { passive: true });
 
-  function openMenu() {
-    toggle?.classList.add('is-open');
-    menu?.classList.add('is-open');
-    toggle?.setAttribute('aria-expanded', 'true');
-    menu?.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-  }
-
-  toggle?.addEventListener('click', () => {
-    const isOpen = toggle.classList.contains('is-open');
-    if (isOpen) {
-      closeMenu();
-    } else {
-      openMenu();
+    // Close menu
+    function closeMenu() {
+      toggle.classList.remove('is-open');
+      menu.classList.remove('is-open');
+      toggle.setAttribute('aria-expanded', 'false');
+      menu.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
     }
-  });
 
-  // Close mobile menu on link click
-  menu?.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', closeMenu);
-  });
-
-  // Close menu on Escape key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && menu?.classList.contains('is-open')) {
-      closeMenu();
-      toggle?.focus();
+    // Open menu
+    function openMenu() {
+      toggle.classList.add('is-open');
+      menu.classList.add('is-open');
+      toggle.setAttribute('aria-expanded', 'true');
+      menu.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
     }
-  });
 
-  // Close menu on resize to desktop
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 1024 && menu?.classList.contains('is-open')) {
-      closeMenu();
-    }
-  }, { passive: true });
+    // Toggle
+    toggle.addEventListener('click', () => {
+      if (toggle.classList.contains('is-open')) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    });
+
+    // Close on link click
+    menu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && menu.classList.contains('is-open')) {
+        closeMenu();
+        toggle.focus();
+      }
+    });
+
+    // Close on resize to desktop
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 1024 && menu.classList.contains('is-open')) {
+        closeMenu();
+      }
+    }, { passive: true });
+  });
 </script>
