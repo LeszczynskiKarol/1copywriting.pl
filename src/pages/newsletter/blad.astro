@@ -1,0 +1,78 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Błąd"
+  description="Wystąpił błąd z newsletterem"
+  noindex={true}
+>
+  <section class="confirmation">
+    <div class="container">
+      <div class="confirmation__card">
+        <div class="confirmation__icon">❌</div>
+        <h1 class="confirmation__title">Coś poszło nie tak</h1>
+        <p class="confirmation__text">
+          Link jest nieprawidłowy lub wygasł. Jeśli chcesz zapisać się na newsletter, 
+          spróbuj ponownie na stronie głównej.
+        </p>
+        <a href="/" class="confirmation__btn">
+          ← Wróć na stronę główną
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .confirmation {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    padding: var(--space-4xl) 0;
+  }
+
+  .confirmation__card {
+    max-width: 480px;
+    margin: 0 auto;
+    text-align: center;
+    background: var(--color-paper-warm);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-xl);
+    padding: var(--space-3xl);
+  }
+
+  .confirmation__icon {
+    font-size: 4rem;
+    margin-bottom: var(--space-lg);
+  }
+
+  .confirmation__title {
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .confirmation__text {
+    color: var(--color-ink-muted);
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-xl);
+  }
+
+  .confirmation__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-xl);
+    font-weight: 600;
+    color: white;
+    background: var(--color-accent);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+  }
+
+  .confirmation__btn:hover {
+    background: var(--color-accent-hover);
+    color: white;
+    transform: translateY(-1px);
+  }
+</style>

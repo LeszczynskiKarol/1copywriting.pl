@@ -1,0 +1,418 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import { SITE } from '@/utils/config';
+
+const breadcrumbs = [
+  { label: 'Strona główna', href: '/' },
+  { label: 'Polityka prywatności' },
+];
+
+const lastUpdate = '3 lutego 2026';
+---
+
+<BaseLayout
+  title="Polityka prywatności"
+  description="Polityka prywatności serwisu 1copywriting.pl. Informacje o przetwarzaniu danych osobowych, plikach cookies i prawach użytkowników zgodnie z RODO."
+>
+  <article class="privacy">
+    <div class="container">
+      <Breadcrumbs items={breadcrumbs} />
+
+      <header class="privacy__header">
+        <h1 class="privacy__title">Polityka prywatności</h1>
+        <p class="privacy__update">Ostatnia aktualizacja: {lastUpdate}</p>
+      </header>
+
+      <div class="privacy__content prose">
+        <p class="privacy__lead">
+          Niniejsza Polityka Prywatności określa zasady przetwarzania i ochrony danych osobowych 
+          użytkowników serwisu <strong>1copywriting.pl</strong> zgodnie z Rozporządzeniem Parlamentu 
+          Europejskiego i Rady (UE) 2016/679 z dnia 27 kwietnia 2016 r. (RODO).
+        </p>
+
+        <h2 id="administrator">1. Administrator danych</h2>
+        <p>
+          Administratorem danych osobowych zbieranych za pośrednictwem serwisu {SITE.title} jest:
+        </p>
+        <address class="privacy__address">
+          <strong>TorWeb Karol Leszczyński</strong><br />
+          ul. Włocławska 167/1<br />
+          87-100 Toruń<br />
+          NIP: 8792553051<br />
+          E-mail: <a href="mailto:kontakt@1copywriting.pl">kontakt@1copywriting.pl</a>
+        </address>
+
+        <h2 id="dane-zbierane">2. Jakie dane zbieramy</h2>
+        <p>W ramach korzystania z serwisu możemy zbierać następujące dane:</p>
+        
+        <h3>2.1. Dane zbierane automatycznie</h3>
+        <ul>
+          <li>Adres IP urządzenia</li>
+          <li>Typ przeglądarki i systemu operacyjnego</li>
+          <li>Czas spędzony na stronie i odwiedzone podstrony</li>
+          <li>Źródło wejścia na stronę (referrer)</li>
+          <li>Przybliżona lokalizacja geograficzna (kraj, miasto)</li>
+          <li>Rozdzielczość ekranu i typ urządzenia</li>
+        </ul>
+
+        <h3>2.2. Dane podawane dobrowolnie</h3>
+        <ul>
+          <li>Adres e-mail (przy zapisie na newsletter)</li>
+          <li>Imię (opcjonalnie, przy zapisie na newsletter)</li>
+          <li>Dane kontaktowe (przy korzystaniu z formularza kontaktowego)</li>
+        </ul>
+
+        <h2 id="cele-przetwarzania">3. Cele przetwarzania danych</h2>
+        <p>Przetwarzamy dane osobowe w następujących celach:</p>
+        <ul>
+          <li>
+            <strong>Analityka i statystyki</strong> — aby zrozumieć, jak użytkownicy korzystają 
+            z serwisu i móc go ulepszać (podstawa prawna: art. 6 ust. 1 lit. a RODO — zgoda)
+          </li>
+          <li>
+            <strong>Wysyłka newslettera</strong> — aby dostarczać treści edukacyjne o copywritingu 
+            (podstawa prawna: art. 6 ust. 1 lit. a RODO — zgoda)
+          </li>
+          <li>
+            <strong>Obsługa zapytań</strong> — aby odpowiadać na wiadomości przesłane przez 
+            formularz kontaktowy (podstawa prawna: art. 6 ust. 1 lit. b RODO — wykonanie umowy)
+          </li>
+          <li>
+            <strong>Marketing</strong> — aby wyświetlać spersonalizowane reklamy, jeśli użytkownik 
+            wyrazi na to zgodę (podstawa prawna: art. 6 ust. 1 lit. a RODO — zgoda)
+          </li>
+        </ul>
+
+        <h2 id="cookies">4. Pliki cookies</h2>
+        <p>
+          Serwis {SITE.title} wykorzystuje pliki cookies (ciasteczka) — małe pliki tekstowe 
+          zapisywane na urządzeniu użytkownika. Cookies dzielimy na następujące kategorie:
+        </p>
+
+        <h3>4.1. Cookies niezbędne</h3>
+        <p>
+          Są wymagane do prawidłowego funkcjonowania strony. Nie wymagają zgody użytkownika.
+        </p>
+        <table class="privacy__table">
+          <thead>
+            <tr>
+              <th>Nazwa</th>
+              <th>Cel</th>
+              <th>Ważność</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>1copywriting_cookie_consent</code></td>
+              <td>Przechowuje preferencje zgód użytkownika</td>
+              <td>1 rok</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>4.2. Cookies analityczne</h3>
+        <p>
+          Służą do zbierania statystyk dotyczących ruchu na stronie. Wykorzystujemy 
+          <strong>Google Analytics 4</strong> (identyfikator: G-K50DRLY6EF) oraz 
+          <strong>Google Tag Manager</strong> (identyfikator: GTM-WZ5ZXCMT).
+        </p>
+        <table class="privacy__table">
+          <thead>
+            <tr>
+              <th>Nazwa</th>
+              <th>Dostawca</th>
+              <th>Cel</th>
+              <th>Ważność</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>_ga</code></td>
+              <td>Google Analytics</td>
+              <td>Rozróżnianie użytkowników</td>
+              <td>2 lata</td>
+            </tr>
+            <tr>
+              <td><code>_ga_*</code></td>
+              <td>Google Analytics</td>
+              <td>Utrzymanie stanu sesji</td>
+              <td>2 lata</td>
+            </tr>
+            <tr>
+              <td><code>_gid</code></td>
+              <td>Google Analytics</td>
+              <td>Rozróżnianie użytkowników</td>
+              <td>24 godziny</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>4.3. Cookies marketingowe</h3>
+        <p>
+          Służą do wyświetlania spersonalizowanych reklam i remarketingu. Są instalowane 
+          tylko po wyrażeniu zgody przez użytkownika.
+        </p>
+        <table class="privacy__table">
+          <thead>
+            <tr>
+              <th>Nazwa</th>
+              <th>Dostawca</th>
+              <th>Cel</th>
+              <th>Ważność</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>_gcl_au</code></td>
+              <td>Google Ads</td>
+              <td>Śledzenie konwersji</td>
+              <td>90 dni</td>
+            </tr>
+            <tr>
+              <td><code>IDE</code></td>
+              <td>Google DoubleClick</td>
+              <td>Remarketing</td>
+              <td>1 rok</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>4.4. Zarządzanie cookies</h3>
+        <p>
+          Przy pierwszej wizycie na stronie wyświetlamy banner z prośbą o zgodę na cookies. 
+          Możesz w każdej chwili zmienić swoje preferencje, klikając przycisk 
+          <button type="button" onclick="openCookieSettings()" class="privacy__cookie-link">
+            Ustawienia cookies
+          </button> 
+          w stopce strony.
+        </p>
+        <p>
+          Możesz również zarządzać cookies w ustawieniach przeglądarki. Pamiętaj jednak, 
+          że zablokowanie niektórych cookies może wpłynąć na funkcjonalność strony.
+        </p>
+
+        <h2 id="google-consent">5. Google Consent Mode v2</h2>
+        <p>
+          Stosujemy <strong>Google Consent Mode v2</strong> — mechanizm, który automatycznie 
+          dostosowuje działanie usług Google do preferencji użytkownika dotyczących cookies. 
+          Dzięki temu:
+        </p>
+        <ul>
+          <li>Jeśli nie wyrazisz zgody na cookies analityczne, Google Analytics nie będzie zbierać danych</li>
+          <li>Jeśli nie wyrazisz zgody na cookies marketingowe, reklamy nie będą personalizowane</li>
+          <li>Twoje preferencje są respektowane w czasie rzeczywistym</li>
+        </ul>
+
+        <h2 id="prawa-uzytkownika">6. Prawa użytkownika</h2>
+        <p>Zgodnie z RODO przysługują Ci następujące prawa:</p>
+        <ul>
+          <li><strong>Prawo dostępu</strong> — możesz żądać informacji o przetwarzanych danych</li>
+          <li><strong>Prawo do sprostowania</strong> — możesz żądać poprawienia nieprawidłowych danych</li>
+          <li><strong>Prawo do usunięcia</strong> — możesz żądać usunięcia swoich danych („prawo do bycia zapomnianym")</li>
+          <li><strong>Prawo do ograniczenia przetwarzania</strong> — możesz żądać ograniczenia przetwarzania danych</li>
+          <li><strong>Prawo do przenoszenia danych</strong> — możesz żądać przekazania danych w formacie nadającym się do odczytu maszynowego</li>
+          <li><strong>Prawo do sprzeciwu</strong> — możesz sprzeciwić się przetwarzaniu danych w celach marketingowych</li>
+          <li><strong>Prawo do cofnięcia zgody</strong> — możesz w każdej chwili cofnąć udzieloną zgodę</li>
+        </ul>
+        <p>
+          Aby skorzystać z powyższych praw, skontaktuj się z nami pod adresem: 
+          <a href="mailto:kontakt@1copywriting.pl">kontakt@1copywriting.pl</a>
+        </p>
+
+        <h2 id="odbiorcy-danych">7. Odbiorcy danych</h2>
+        <p>Twoje dane mogą być przekazywane następującym podmiotom:</p>
+        <ul>
+          <li><strong>Google LLC</strong> — w ramach usług Google Analytics i Google Tag Manager (dane mogą być transferowane do USA na podstawie standardowych klauzul umownych)</li>
+          <li><strong>Dostawca hostingu</strong> — Amazon Web Services (AWS) w celu przechowywania i serwowania strony</li>
+          <li><strong>Dostawca usługi newsletter</strong> — w przypadku zapisu na newsletter</li>
+        </ul>
+
+        <h2 id="okres-przechowywania">8. Okres przechowywania danych</h2>
+        <ul>
+          <li><strong>Dane analityczne</strong> — 26 miesięcy (ustawienie Google Analytics)</li>
+          <li><strong>Dane newsletterowe</strong> — do momentu wypisania się z listy</li>
+          <li><strong>Dane z formularza kontaktowego</strong> — do momentu zakończenia korespondencji + 3 lata na potrzeby ewentualnych roszczeń</li>
+          <li><strong>Preferencje cookies</strong> — 1 rok</li>
+        </ul>
+
+        <h2 id="bezpieczenstwo">9. Bezpieczeństwo danych</h2>
+        <p>Stosujemy odpowiednie środki techniczne i organizacyjne, aby chronić Twoje dane:</p>
+        <ul>
+          <li>Szyfrowanie połączenia SSL/TLS (HTTPS)</li>
+          <li>Hosting na infrastrukturze AWS z certyfikatami bezpieczeństwa</li>
+          <li>Regularne aktualizacje oprogramowania</li>
+          <li>Ograniczony dostęp do danych tylko dla upoważnionych osób</li>
+        </ul>
+
+        <h2 id="zmiany">10. Zmiany w polityce prywatności</h2>
+        <p>
+          Zastrzegamy sobie prawo do wprowadzania zmian w niniejszej Polityce Prywatności. 
+          O istotnych zmianach poinformujemy poprzez komunikat na stronie. Zalecamy regularne 
+          sprawdzanie tej strony.
+        </p>
+
+        <h2 id="kontakt">11. Kontakt</h2>
+        <p>
+          W przypadku pytań dotyczących przetwarzania danych osobowych lub chęci skorzystania 
+          z przysługujących praw, prosimy o kontakt:
+        </p>
+        <address class="privacy__address">
+          E-mail: <a href="mailto:kontakt@1copywriting.pl">kontakt@1copywriting.pl</a>
+        </address>
+        <p>
+          Masz również prawo wnieść skargę do organu nadzorczego — Prezesa Urzędu Ochrony 
+          Danych Osobowych (ul. Stawki 2, 00-193 Warszawa, <a href="https://uodo.gov.pl" target="_blank" rel="noopener">uodo.gov.pl</a>).
+        </p>
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .privacy {
+    padding: var(--space-2xl) 0 var(--space-5xl);
+  }
+
+  .privacy__header {
+    margin-bottom: var(--space-3xl);
+    padding-bottom: var(--space-xl);
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .privacy__title {
+    font-size: var(--text-4xl);
+    margin-bottom: var(--space-sm);
+  }
+
+  .privacy__update {
+    font-size: var(--text-sm);
+    color: var(--color-ink-subtle);
+    margin: 0;
+  }
+
+  .privacy__content {
+    max-width: var(--max-content);
+  }
+
+  .privacy__lead {
+    font-size: var(--text-lg);
+    color: var(--color-ink-muted);
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-2xl);
+    padding-bottom: var(--space-xl);
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .privacy__content h2 {
+    font-size: var(--text-2xl);
+    margin-top: var(--space-3xl);
+    margin-bottom: var(--space-lg);
+    padding-top: var(--space-xl);
+    border-top: 1px solid var(--color-border-light);
+  }
+
+  .privacy__content h2:first-of-type {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .privacy__content h3 {
+    font-size: var(--text-lg);
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .privacy__content p,
+  .privacy__content ul,
+  .privacy__content ol {
+    margin-bottom: var(--space-md);
+    line-height: var(--leading-relaxed);
+  }
+
+  .privacy__content ul,
+  .privacy__content ol {
+    padding-left: var(--space-xl);
+  }
+
+  .privacy__content li {
+    margin-bottom: var(--space-sm);
+  }
+
+  .privacy__content a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .privacy__content a:hover {
+    color: var(--color-accent-hover);
+  }
+
+  .privacy__address {
+    background: var(--color-paper-alt);
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    font-style: normal;
+    line-height: var(--leading-relaxed);
+    margin: var(--space-lg) 0;
+  }
+
+  .privacy__table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--space-lg) 0;
+    font-size: var(--text-sm);
+  }
+
+  .privacy__table th,
+  .privacy__table td {
+    padding: var(--space-sm) var(--space-md);
+    text-align: left;
+    border: 1px solid var(--color-border-light);
+  }
+
+  .privacy__table th {
+    background: var(--color-paper-alt);
+    font-weight: 600;
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-ink-muted);
+  }
+
+  .privacy__table code {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    background: var(--color-paper-warm);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+  }
+
+  .privacy__cookie-link {
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+    font-size: inherit;
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+  }
+
+  .privacy__cookie-link:hover {
+    color: var(--color-accent-hover);
+  }
+
+  @media (max-width: 768px) {
+    .privacy__title {
+      font-size: var(--text-3xl);
+    }
+
+    .privacy__table {
+      display: block;
+      overflow-x: auto;
+    }
+  }
+</style>
