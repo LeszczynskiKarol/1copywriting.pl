@@ -14,7 +14,7 @@ tags:
     "konwersja",
   ]
 keyword: "błędy w copywritingu"
-image: "/images/blog/bledy-poczatkujacych-w-copywritingu.jpg"
+image: "/images/blog/bledy-w-copywritingu.jpg"
 imageAlt: "Błędy w copywritingu"
 priority: "high"
 readingTime: 17
