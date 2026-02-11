@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://1copywriting.pl/sitemap-index.xml
+Sitemap: https://www.1copywriting.pl/sitemap-index.xml
