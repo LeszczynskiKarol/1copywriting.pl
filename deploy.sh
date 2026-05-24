@@ -12,6 +12,8 @@ S3_BUCKET="www.1copywriting.pl"
 CLOUDFRONT_WWW_ID="E1BD994ZWOP8XT"
 CLOUDFRONT_REDIRECT_ID="EDZTOI72QDPK7"
 DIST_DIR="dist"
+SITE_URL="https://www.1copywriting.pl"
+REGION="eu-central-1"
 
 # Colors for output
 RED='\033[0;31m'
@@ -24,6 +26,17 @@ echo -e "${BLUE}============================================${NC}"
 echo -e "${BLUE}  1copywriting.pl - Deploy Script${NC}"
 echo -e "${BLUE}============================================${NC}"
 echo ""
+
+echo "📦 Pushing to GitHub..."
+git add .
+git commit -m "git push from local"
+git push origin main
+
+if [ $? -ne 0 ]; then
+  echo "❌ Git push failed!"
+  exit 1
+fi
+
 
 # Check if dist directory exists
 if [ ! -d "$DIST_DIR" ]; then
@@ -88,6 +101,40 @@ aws cloudfront wait invalidation-completed \
     --distribution-id $CLOUDFRONT_WWW_ID \
     --id $INVALIDATION_ID
 echo -e "${GREEN}✓ Invalidation complete${NC}"
+
+
+# =============================================================================
+# Google Indexing Notification
+# =============================================================================
+echo ""
+echo "🔍 Notifying Google of changes..."
+
+# 1. Ping sitemap (instant, no auth)
+curl -s "https://www.google.com/ping?sitemap=${SITE_URL}/sitemap-index.xml" > /dev/null
+echo "  ✅ Sitemap ping sent"
+
+# 2. Lambda: diff sitemap + Indexing API + Search Console API
+aws lambda invoke \
+  --function-name google-indexing-notifier \
+  --payload "{\"siteUrl\":\"${SITE_URL}\"}" \
+  --cli-binary-format raw-in-base64-out \
+  --region ${REGION} \
+  indexing-result.json > /dev/null 2>&1
+
+if [ $? -eq 0 ]; then
+  # Parse result
+  NEW_COUNT=$(cat indexing-result.json | grep -o '"newUrls":\[[^]]*\]' | grep -o 'https://' | wc -l)
+  REMOVED_COUNT=$(cat indexing-result.json | grep -o '"removedUrls":\[[^]]*\]' | grep -o 'https://' | wc -l)
+  ERRORS=$(cat indexing-result.json | grep -o '"errors":\[[^]]*\]' | grep -o '"[^"]*"' | wc -l)
+  
+  echo "  ✅ Indexing API: +${NEW_COUNT} new, -${REMOVED_COUNT} removed, ${ERRORS} errors"
+else
+  echo "  ⚠️  Lambda invoke failed (deploy succeeded, indexing skipped)"
+fi
+
+echo ""
+echo "🎉 Done! ${SITE_URL} deployed and Google notified."
+
 
 # Done
 echo ""
