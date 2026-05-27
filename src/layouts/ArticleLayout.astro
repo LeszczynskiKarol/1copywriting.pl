@@ -6,6 +6,16 @@ import Newsletter from '@/components/Newsletter.astro';
 import PromoBanner from '@/components/PromoBanner.astro';
 import { SITE } from '@/utils/config';
 
+interface RelatedPost {
+  slug: string;
+  data: {
+    title: string;
+    description?: string;
+    image?: string;
+    readingTime?: number;
+  };
+}
+
 interface Props {
   title: string;
   description: string;
@@ -20,6 +30,7 @@ interface Props {
   imageAlt?: string;
   readingTime?: number;
   headings: { depth: number; slug: string; text: string }[];
+  related?: RelatedPost[];
 }
 
 const {
@@ -36,6 +47,7 @@ const {
   imageAlt,
   readingTime,
   headings,
+  related = [],
 } = Astro.props;
 
 const formattedDate = new Intl.DateTimeFormat('pl-PL', {
@@ -158,6 +170,38 @@ const breadcrumbs = [
           </div>
         </aside>
       </div>
+
+      {related.length > 0 && (
+        <section class="article__related" aria-labelledby="related-heading">
+          <h2 id="related-heading" class="article__related-heading">Powiązane artykuły</h2>
+          <ul class="article__related-list">
+            {related.map((r) => (
+              <li class="article__related-item">
+                <a href={`/blog/${r.slug}/`} class="article__related-link">
+                  {r.data.image && (
+                    <img
+                      src={r.data.image}
+                      alt=""
+                      class="article__related-thumb"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  )}
+                  <div class="article__related-body">
+                    <h3 class="article__related-title">{r.data.title}</h3>
+                    {r.data.description && (
+                      <p class="article__related-desc">{r.data.description}</p>
+                    )}
+                    {r.data.readingTime && (
+                      <span class="article__related-meta">{r.data.readingTime} min czytania</span>
+                    )}
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <div class="article__footer">
         <Newsletter variant="inline" />
@@ -371,6 +415,92 @@ const breadcrumbs = [
     color: var(--color-ink-muted);
     border-radius: var(--radius-full);
     border: 1px solid var(--color-border-light);
+  }
+
+  /* ===== RELATED ARTICLES ===== */
+  .article__related {
+    max-width: var(--max-wide);
+    margin-top: var(--space-4xl);
+    padding-top: var(--space-3xl);
+    border-top: 1px solid var(--color-border-light);
+  }
+
+  .article__related-heading {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-xl);
+    color: var(--color-ink);
+  }
+
+  .article__related-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: var(--space-lg);
+    padding: 0;
+    margin: 0;
+  }
+
+  .article__related-item {
+    margin: 0;
+  }
+
+  .article__related-link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    height: 100%;
+    background: var(--color-paper-alt);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .article__related-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .article__related-thumb {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    display: block;
+  }
+
+  .article__related-body {
+    padding: var(--space-md) var(--space-lg) var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .article__related-title {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    line-height: 1.25;
+    color: var(--color-ink);
+    margin: 0;
+  }
+
+  .article__related-desc {
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+    line-height: var(--leading-normal);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .article__related-meta {
+    font-size: var(--text-xs);
+    color: var(--color-ink-subtle);
+    margin-top: var(--space-xs);
   }
 
   /* ===== FOOTER ===== */

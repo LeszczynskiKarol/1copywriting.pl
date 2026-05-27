@@ -4,13 +4,24 @@ import ArticleLayout from '@/layouts/ArticleLayout.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
-  return posts.map((post) => ({
-    params: { slug: post.slug },
-    props: { post },
-  }));
+  return posts.map((post) => {
+    // Resolve explicit relatedPosts (frontmatter slugs); fall back to same-silo peers.
+    const explicit = (post.data.relatedPosts ?? [])
+      .map((slug) => posts.find((p) => p.slug === slug))
+      .filter(Boolean);
+    const fallback = posts
+      .filter((p) => p.data.silo === post.data.silo && p.slug !== post.slug)
+      .slice(0, 5);
+    const related = (explicit.length ? explicit : fallback).slice(0, 5);
+
+    return {
+      params: { slug: post.slug },
+      props: { post, related },
+    };
+  });
 }
 
-const { post } = Astro.props;
+const { post, related } = Astro.props;
 const { Content, headings } = await post.render();
 ---
 
@@ -28,6 +39,7 @@ const { Content, headings } = await post.render();
   imageAlt={post.data.imageAlt}
   readingTime={post.data.readingTime}
   headings={headings}
+  related={related}
 >
   <Content />
 </ArticleLayout>

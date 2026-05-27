@@ -64,10 +64,6 @@ const ogImage = new URL(image, SITE.url).href;
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImage} />
 
-<!-- Preconnect -->
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
 <!-- JSON-LD Schema -->
 {schema && (
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />

@@ -345,9 +345,14 @@
     function init() {
       const consent = getConsent();
 
+      // Always load GTM. Consent Mode v2 governs what fires, not whether GTM loads;
+      // with the 'denied' defaults set above, GTM still sends cookieless pings used
+      // for behavioural modelling. Without this, first-time visitors who never
+      // interact with the banner are invisible to GA4.
+      loadGoogleScripts(consent || { necessary: true, analytics: false, marketing: false });
+
       if (consent) {
         updateGoogleConsent(consent);
-        loadGoogleScripts(consent);
       } else {
         showBanner();
       }
