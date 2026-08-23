@@ -27,6 +27,11 @@ echo -e "${BLUE}  1copywriting.pl - Deploy Script${NC}"
 echo -e "${BLUE}============================================${NC}"
 echo ""
 
+# Walidacja treści — zanim cokolwiek pójdzie do repo i na produkcję.
+# Wyłapuje m.in. wpisy z okładką, której plik nie istnieje w public/.
+echo "🔎 Walidacja treści..."
+npm run check:covers
+
 echo "📦 Pushing to GitHub..."
 git add .
 git commit -m "git push from local" || echo "  (brak zmian do commita — kontynuuję)"

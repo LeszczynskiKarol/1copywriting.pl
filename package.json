@@ -8,7 +8,9 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check:covers": "node scripts/check-covers.mjs",
+    "prebuild": "node scripts/check-covers.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.0",
