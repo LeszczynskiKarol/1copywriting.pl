@@ -1,0 +1,10 @@
+# 1copywriting.pl
+
+> Przewodnik po copywritingu: czym jest copywriting, zasady pisania tekstów, SEO copywriting i słownik pojęć copywriterskich.
+
+## Najważniejsze strony
+
+- [Strona główna](https://www.1copywriting.pl/)
+- [SEO copywriting](https://www.1copywriting.pl/blog/seo-copywriting/): jak pisać teksty pod Google
+- [Copywriting — co to jest](https://www.1copywriting.pl/blog/copywriting-co-to-jest/)
+- [Słownik copywritera](https://www.1copywriting.pl/slownik-copywritera/)
